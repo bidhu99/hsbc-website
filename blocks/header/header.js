@@ -1,166 +1,123 @@
 import { getMetadata } from '../../scripts/aem.js';
-import { loadFragment } from '../fragment/fragment.js';
 
-// media query match that indicates mobile/tablet width
-const isDesktop = window.matchMedia('(min-width: 900px)');
+export default function decorate(block) {
+  const allBlocks = document.querySelectorAll('.secondarynavigation > div');
 
-function closeOnEscape(e) {
-  if (e.code === 'Escape') {
-    const nav = document.getElementById('nav');
-    const navSections = nav.querySelector('.nav-sections');
-    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
-    if (navSectionExpanded && isDesktop.matches) {
-      // eslint-disable-next-line no-use-before-define
-      toggleAllNavSections(navSections);
-      navSectionExpanded.focus();
-    } else if (!isDesktop.matches) {
-      // eslint-disable-next-line no-use-before-define
-      toggleMenu(nav, navSections);
-      nav.querySelector('button').focus();
+  const leftData = [];
+  const rightData = [];
+
+  allBlocks.forEach((block, index) => {
+    const name = block.children[0]?.innerText.trim();
+    const url = block.children[1]?.innerText.trim();
+
+    const obj = { name, url };
+
+    if (index < 4) {
+      leftData.push(obj);
+    } else {
+      rightData.push(obj);
     }
-  }
-}
-
-function closeOnFocusLost(e) {
-  const nav = e.currentTarget;
-  if (!nav.contains(e.relatedTarget)) {
-    const navSections = nav.querySelector('.nav-sections');
-    const navSectionExpanded = navSections.querySelector('[aria-expanded="true"]');
-    if (navSectionExpanded && isDesktop.matches) {
-      // eslint-disable-next-line no-use-before-define
-      toggleAllNavSections(navSections, false);
-    } else if (!isDesktop.matches) {
-      // eslint-disable-next-line no-use-before-define
-      toggleMenu(nav, navSections, false);
-    }
-  }
-}
-
-function openOnKeydown(e) {
-  const focused = document.activeElement;
-  const isNavDrop = focused.className === 'nav-drop';
-  if (isNavDrop && (e.code === 'Enter' || e.code === 'Space')) {
-    const dropExpanded = focused.getAttribute('aria-expanded') === 'true';
-    // eslint-disable-next-line no-use-before-define
-    toggleAllNavSections(focused.closest('.nav-sections'));
-    focused.setAttribute('aria-expanded', dropExpanded ? 'false' : 'true');
-  }
-}
-
-function focusNavSection() {
-  document.activeElement.addEventListener('keydown', openOnKeydown);
-}
-
-/**
- * Toggles all nav sections
- * @param {Element} sections The container element
- * @param {Boolean} expanded Whether the element should be expanded or collapsed
- */
-function toggleAllNavSections(sections, expanded = false) {
-  sections.querySelectorAll('.nav-sections .default-content-wrapper > ul > li').forEach((section) => {
-    section.setAttribute('aria-expanded', expanded);
   });
+
+  appendHeader(leftData,rightData);
 }
 
-/**
- * Toggles the entire nav
- * @param {Element} nav The container element
- * @param {Element} navSections The nav sections within the container element
- * @param {*} forceExpanded Optional param to force nav expand behavior when not null
- */
-function toggleMenu(nav, navSections, forceExpanded = null) {
-  const expanded = forceExpanded !== null ? !forceExpanded : nav.getAttribute('aria-expanded') === 'true';
-  const button = nav.querySelector('.nav-hamburger button');
-  document.body.style.overflowY = (expanded || isDesktop.matches) ? '' : 'hidden';
-  nav.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-  toggleAllNavSections(navSections, expanded || isDesktop.matches ? 'false' : 'true');
-  button.setAttribute('aria-label', expanded ? 'Open navigation' : 'Close navigation');
-  // enable nav dropdown keyboard accessibility
-  const navDrops = navSections.querySelectorAll('.nav-drop');
-  if (isDesktop.matches) {
-    navDrops.forEach((drop) => {
-      if (!drop.hasAttribute('tabindex')) {
-        drop.setAttribute('tabindex', 0);
-        drop.addEventListener('focus', focusNavSection);
-      }
-    });
-  } else {
-    navDrops.forEach((drop) => {
-      drop.removeAttribute('tabindex');
-      drop.removeEventListener('focus', focusNavSection);
-    });
-  }
+// Function to generate the HTML
+function generateHeader(leftData,rightData) {
+  const headerContainer = document.createElement('div');
+  headerContainer.classList.add('header-top-container', 'hide-on-mobile-and-tablet');
 
-  // enable menu collapse on escape keypress
-  if (!expanded || isDesktop.matches) {
-    // collapse menu on escape press
-    window.addEventListener('keydown', closeOnEscape);
-    // collapse menu on focus lost
-    nav.addEventListener('focusout', closeOnFocusLost);
-  } else {
-    window.removeEventListener('keydown', closeOnEscape);
-    nav.removeEventListener('focusout', closeOnFocusLost);
-  }
-}
+  const headerTop = document.createElement('div');
+  headerTop.classList.add('header-top');
 
-/**
- * loads and decorates the header, mainly the nav
- * @param {Element} block The header block element
- */
-export default async function decorate(block) {
-  // load nav as fragment
-  const navMeta = getMetadata('nav');
-  const navPath = navMeta ? new URL(navMeta, window.location).pathname : '/nav';
-  const fragment = await loadFragment(navPath);
+  const row = document.createElement('div');
+  row.classList.add('row');
 
-  // decorate nav DOM
-  block.textContent = '';
+  const lg12 = document.createElement('div');
+  lg12.classList.add('lg-12');
+
   const nav = document.createElement('nav');
-  nav.id = 'nav';
-  while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
+  nav.setAttribute('aria-label', 'product line');
 
-  const classes = ['brand', 'sections', 'tools'];
-  classes.forEach((c, i) => {
-    const section = nav.children[i];
-    if (section) section.classList.add(`nav-${c}`);
+  const ul = document.createElement('ul');
+  ul.classList.add('header-top-navigation');
+
+  // Generate navigation items based on the first data array (data)
+  leftData.forEach((item, index) => {
+    if (item.name) { // Only create the item if name is present
+      const li = document.createElement('li');
+      li.classList.add('header-top-navigation-item');
+      if (index === 0) li.classList.add('is-active');  // Mark the first item as active
+
+      const a = item.url ? document.createElement('a') : document.createElement('span');  // If URL exists, use anchor tag, else span tag
+      if (item.url) {
+        a.href = item.url;
+        a.setAttribute('data-event-component', 'topnav');
+        a.setAttribute('data-event-name', `${item.name.toLowerCase()} banking|component:top nav|position:${index + 1}`);
+        a.setAttribute('aria-selected', index === 0 ? 'true' : 'false');
+        a.setAttribute('aria-label', `${item.name} ${index === 0 ? 'currently selected' : ''}`);
+      }
+      a.textContent = item.name;
+
+      li.appendChild(a);
+      ul.appendChild(li);
+    }
   });
 
-  const navBrand = nav.querySelector('.nav-brand');
-  const brandLink = navBrand.querySelector('.button');
-  if (brandLink) {
-    brandLink.className = '';
-    brandLink.closest('.button-container').className = '';
-  }
+  nav.appendChild(ul);
 
-  const navSections = nav.querySelector('.nav-sections');
-  if (navSections) {
-    navSections.querySelectorAll(':scope .default-content-wrapper > ul > li').forEach((navSection) => {
-      if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
-      navSection.addEventListener('click', () => {
-        if (isDesktop.matches) {
-          const expanded = navSection.getAttribute('aria-expanded') === 'true';
-          toggleAllNavSections(navSections);
-          navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-        }
-      });
-    });
-  }
+  // Generate meta section for language and user options from the second data array (data2)
+  const metaDiv = document.createElement('div');
+  metaDiv.classList.add('header-top-meta');
 
-  // hamburger for mobile
-  const hamburger = document.createElement('div');
-  hamburger.classList.add('nav-hamburger');
-  hamburger.innerHTML = `<button type="button" aria-controls="nav" aria-label="Open navigation">
-      <span class="nav-hamburger-icon"></span>
-    </button>`;
-  hamburger.addEventListener('click', () => toggleMenu(nav, navSections));
-  nav.prepend(hamburger);
-  nav.setAttribute('aria-expanded', 'false');
-  // prevent mobile nav behavior on window resize
-  toggleMenu(nav, navSections, isDesktop.matches);
-  isDesktop.addEventListener('change', () => toggleMenu(nav, navSections, isDesktop.matches));
+  const dropdownContainer = document.createElement('div');
+  dropdownContainer.classList.add('dropdown-container');
 
-  const navWrapper = document.createElement('div');
-  navWrapper.className = 'nav-wrapper';
-  navWrapper.append(nav);
-  block.append(navWrapper);
+  const dropdownNav = document.createElement('nav');
+  dropdownNav.setAttribute('aria-label', 'language');
+
+  const dropdownUl = document.createElement('ul');
+
+  // Generate language item (from data2)
+  rightData.forEach((item) => {
+    if (item.name) { // Only create the item if name is present
+      const li = document.createElement('li');
+      li.classList.add('header-dropdown', 'header-generic-dropdown');
+
+      const span = document.createElement('span');
+      span.innerHTML = item.url ? `<a href="${item.url}">${item.name}</a>` : item.name; // If URL exists, wrap name in anchor
+      li.appendChild(span);
+      dropdownUl.appendChild(li);
+    }
+  });
+
+  // Add the generated dropdown items to the dropdownNav
+  dropdownNav.appendChild(dropdownUl);
+  dropdownContainer.appendChild(dropdownNav);
+  metaDiv.appendChild(dropdownContainer);
+
+  // Append everything to the main container
+  lg12.appendChild(nav);
+  lg12.appendChild(metaDiv);
+  row.appendChild(lg12);
+  headerTop.appendChild(row);
+  headerContainer.appendChild(headerTop);
+
+  return headerContainer;
+}
+
+// Function to append the header only once
+function appendHeader(leftData,rightData) {
+    // Check if the header already exists
+    const existingHeader = document.querySelector('.header-top-container');
+    if (existingHeader) {
+        existingHeader.remove();  // Remove the existing header if it already exists
+    }
+
+    // Append the new header
+    const wrapper = document.querySelector('.secondarynavigation-wrapper');
+    wrapper.appendChild(generateHeader(leftData,rightData));
+
+    const oldNav = document.querySelector('.secondarynavigation');
+    if (oldNav) oldNav.remove();
 }
