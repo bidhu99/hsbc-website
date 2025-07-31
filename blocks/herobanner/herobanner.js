@@ -76,7 +76,7 @@ function renderHeroBanner(json) {
                   </h2>
                   <div id="par_hero_description_1">
                     <div class="crh-hero-banner__main-lead A-TYPS5R-RW-DEV text-container text" et-event-counter="1">
-                      ${json.mainDescription}
+                      ${json.ctaText}
                     </div>
                   </div>
                   <div class="crh-hero-banner__main-buttons-wrapper">
@@ -84,8 +84,8 @@ function renderHeroBanner(json) {
                       <a class="crh-button crh-link-button crh-button-primary crh-hero-banner__main-button"
                         href="${json.ctaLink}" target="_blank" rel="noopener"
                         data-event-name="${json.ctaText}">
-                        <span aria-hidden="true">${json.ctaText}</span>
-                        <span class="visuallyhidden">${json.ctaText} This link will open in a new window</span>
+                        <span aria-hidden="true">${json.mainDescription}</span>
+                        <span class="visuallyhidden">${json.mainDescription} This link will open in a new window</span>
                       </a>
                     </div>
                   </div>
