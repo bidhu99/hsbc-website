@@ -1,7 +1,7 @@
 import { getMetadata } from '../../scripts/aem.js';
 
 export default function decorate(block) {
-  const allBlocks = document.querySelectorAll('.secondarynavigation > div');
+  const allBlocks = document.querySelectorAll('.primaryheader > div');
 
   const leftData = [];
   const rightData = [];
@@ -20,6 +20,7 @@ export default function decorate(block) {
   });
 
   appendHeader(leftData,rightData);
+  block.appendChild(generateHeader(leftData,rightData));
 }
 
 // Function to generate the HTML
@@ -114,10 +115,6 @@ function appendHeader(leftData,rightData) {
         existingHeader.remove();  // Remove the existing header if it already exists
     }
 
-    // Append the new header
-    const wrapper = document.querySelector('.secondarynavigation-wrapper');
-    wrapper.appendChild(generateHeader(leftData,rightData));
-
-    const oldNav = document.querySelector('.secondarynavigation');
+    const oldNav = document.querySelector('.primaryheader-container');
     if (oldNav) oldNav.remove();
 }
