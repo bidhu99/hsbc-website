@@ -87,7 +87,4 @@ export default function decorate(block) {
   } else {
     console.warn("<main> tag not found.");
   }
-
-  const oldNav = document.querySelector(".multilinks-container");
-  if (oldNav) oldNav.remove();
 }
