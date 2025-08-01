@@ -17,6 +17,11 @@ import {
  * Builds hero block and prepends to main in a new section.
  * @param {Element} main The container element
  */
+
+const pageRoutes = {
+  home: "/",
+};
+
 function buildHeroBlock(main) {
   const h1 = main.querySelector("h1");
   const picture = main.querySelector("picture");
@@ -81,7 +86,13 @@ async function loadEager(doc) {
   decorateTemplateAndTheme();
   const main = doc.querySelector("main");
   if (main) {
+    const pageUrl = window.location?.pathname;
     decorateMain(main);
+
+    if (pageUrl === pageRoutes.home) {
+      document.body.classList.add("globalSmartHomePage");
+    }
+
     document.body.classList.add("appear");
     await loadSection(main.querySelector(".section"), waitForFirstImage);
   }

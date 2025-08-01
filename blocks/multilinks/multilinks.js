@@ -66,7 +66,7 @@ export default function decorate(block) {
 
   // Wrap everything
   const finalHtml = `
-  <div class="grid">
+  <div>
   <div class="row with-bg">
             <div class="sm-12">
   <div class="cc-wrapper O-COLCTRL-RW-DEV" role="region">
