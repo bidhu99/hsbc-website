@@ -3,9 +3,11 @@ import {
 } from '../../scripts/aem.js';
 
 export default function decorate(block) {
-    const surveyJson = extractSurveyData();
-    appendToMain(surveyJson);
-    appendImageItem(surveyJson);
+    if(block.classList.contains("right")){
+      const surveyJson = extractSurveyData();
+      appendToMain(surveyJson);
+      appendImageItem(surveyJson);
+    }
 }
 
 function createSurveyHTML(surveyData) {
