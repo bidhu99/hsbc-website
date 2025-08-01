@@ -19,9 +19,9 @@ function textWithOutHeading(sourcePara) {
 
   // Step 2: Create the new HTML structure
   const wrapper = document.createElement("div");
-  // wrapper.className = "grid";
+  wrapper.className = "row";
   wrapper.innerHTML = `
-        <div class="cc-wrapper O-COLCTRL-RW-DEV" role="region">
+        <div class="cc-wrapper O-COLCTRL-RW-DEV sm-12" role="region">
           <div id="hp_main_columnControl_5">
             <div class="cc cc-columns-66-33">
               <div id="hp_main_columnControlColumn_11" class="cc-column">
@@ -55,10 +55,10 @@ function textWithHeading(textWrapper) {
 
   // Step 3: Create new structure
   const wrapper = document.createElement("div");
-  // wrapper.className = "grid";
+  wrapper.className = "row";
 
   wrapper.innerHTML = `
-          <div class="cc-wrapper O-COLCTRL-RW-DEV" role="region">
+          <div class="cc-wrapper O-COLCTRL-RW-DEV sm-12" role="region">
             <div class="cc-wrapper O-COLCTRL-RW-DEV" role="region">
               <div id="hp_rel_columnControl_1">
                 <div class="cc cc-columns-66-33">

@@ -3,11 +3,11 @@ import { getMetadata } from "../../scripts/aem.js";
 export default function decorate(block) {
   const cardsData = parseArticleCardsToJson(".articlecards-wrapper");
   const wrapper = document.createElement("div");
-  // wrapper.className = "grid";
+  wrapper.className = "row";
   wrapper.setAttribute("role", "region");
 
   wrapper.innerHTML = `
-  <div class = "O-SMARTSPCGEN-DEV O-MASTERCARD-RW-DEV">
+  <div class = "sm-12 O-SMARTSPCGEN-DEV O-MASTERCARD-RW-DEV">
     <div id="hp_main_masterCard_1" class="crh-master-card">
       <div class="crh-master-card__grid">
         <div role="list" class="crh-master-cards crh-master-cards__size-3" data-cards-size="3"></div>

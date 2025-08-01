@@ -64,7 +64,7 @@ function renderHeroBanner(json) {
 
   const heroHTML = `
   <div class="row transparent-bg intro-section hero-remove-height">
-    <div class="">
+    <div class="sm-12">
       <div class="O-HERO-RW-DEV">
         <div class="crh-grid grid O-SMARTSPCGENGRID">
           <div class="crh-hero-banner" et-event-counter="2">

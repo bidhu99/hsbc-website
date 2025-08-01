@@ -31,10 +31,10 @@ export default function decorate(block) {
 
 function createMasterCards(data) {
   const containerGrid = document.createElement("div");
-  // containerGrid.className = "grid";
+  containerGrid.className = "row";
 
   const container = document.createElement("div");
-  container.className = "O-SMARTSPCGEN-DEV O-MASTERCARD-RW-DEV";
+  container.className = "sm-12 O-SMARTSPCGEN-DEV O-MASTERCARD-RW-DEV";
   container.setAttribute("role", "region");
 
   containerGrid.appendChild(container);
