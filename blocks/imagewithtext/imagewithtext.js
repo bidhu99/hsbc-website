@@ -6,6 +6,43 @@ export default function decorate(block) {
     appendToMain(surveyJson);
     appendImageItem(surveyJson);
   }
+  if (block.classList.contains("below")) {
+    // Step 1: Extract relevant data and filter valid entries
+    const imageTextBlocks = block.querySelectorAll(
+      ".imagewithtext-wrapper .imagewithtext > div"
+    );
+
+    const filteredAppFraudData = [];
+
+    imageTextBlocks.forEach((individualBlock) => {
+      const img =
+        individualBlock.querySelector("img")?.getAttribute("src") || "";
+      const paragraphs = individualBlock.querySelectorAll("p");
+      const heading = paragraphs[0]?.textContent.trim() || "";
+      const description = paragraphs[1]?.textContent.trim() || "";
+      const link =
+        individualBlock.querySelector("a")?.getAttribute("href") || "";
+
+      // Only add items that have a valid image, heading, description, and link
+      if (img && heading && description && link) {
+        filteredAppFraudData.push({
+          image: img,
+          heading: heading,
+          description: description,
+          link: link,
+        });
+      }
+    });
+
+    const main = document.querySelector("main");
+    if (main) {
+      const generatedHtml = createHtmlFromData(filteredAppFraudData);
+      main.appendChild(generatedHtml);
+    }
+  }
+  if (block.classList.contains("single")) {
+    imageWithTextSingle();
+  }
 }
 
 function createSurveyHTML(surveyData) {
@@ -191,4 +228,151 @@ function extractSurveyData() {
     subTitle,
     sections,
   };
+}
+
+function createHtmlFromData(data) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "cc-wrapper O-COLCTRL-RW-DEV";
+  wrapper.setAttribute("role", "region");
+
+  const columnControl = document.createElement("div");
+  columnControl.className = "cc cc-columns-50-50 cc-mobile-reflow";
+
+  data.forEach((item, index) => {
+    const column = document.createElement("div");
+    column.className = "cc-column";
+
+    column.innerHTML = `
+      <div class="M-IMG-RW-DEV O-SMARTSPCGEN-DEV" role="region">
+        <div class="smart-image">
+          <figure class="smart-image-figure">
+            <picture>
+              <img class="A-IMAGE-RW-ALL smart-image-img" src="${item.image}" alt="${item.heading}" width="550" height="350" />
+            </picture>
+          </figure>
+        </div>
+      </div>
+
+      <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV" role="region">
+        <h3 class="heading A-TYP22L-RW-ALL remove-bottom-space">${item.heading}</h3>
+      </div>
+
+      <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text" role="region">
+        <div class="A-PAR16R-RW-ALL-WRAPPER">
+          <p class="A-PAR16R-RW-ALL">${item.description}</p>
+        </div>
+      </div>
+
+      <div class="O-SMARTSPCGEN-DEV M-CONTMAST-RW-RBWM links" role="region">
+        <div>
+          <ul class="links-list">
+            <li>
+              <div class="link-container">
+                <a class="A-LNKST-RW-ALL" href="${item.link}" target="_blank" rel="noopener" data-event-component="text link" data-event-name="See full results">
+                  <span aria-hidden="true" class="link">See full results</span>
+                  <span class="icon icon-chevron-right" aria-hidden="true"></span>
+                  <span class="visuallyhidden">See full results. This link will open in a new window</span>
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    `;
+
+    columnControl.appendChild(column);
+  });
+
+  const columnControlWrapper = document.createElement("div");
+  columnControlWrapper.appendChild(columnControl);
+  wrapper.appendChild(columnControlWrapper);
+
+  return wrapper;
+}
+
+function imageWithTextSingle() {
+  // Get the source HTML container
+  const sourceBlock = document.querySelector(
+    ".imagewithtext-wrapper .imagewithtext.single"
+  );
+
+  // Extract image URL
+  const imageSrc = sourceBlock.querySelector("img")?.getAttribute("src") || "";
+
+  // Extract paragraph content
+  const paragraphs = sourceBlock.querySelectorAll("p");
+  const p1 = paragraphs[0]?.innerHTML.trim() || "";
+  const p2 = paragraphs[1]?.innerText.trim() || "";
+  const p3 = paragraphs[2]?.innerText.trim() || "";
+
+  // Extract link href and display text
+  const fullLink = sourceBlock.querySelector("a")?.getAttribute("href") || "";
+  const linkText =
+    sourceBlock.querySelector("div:nth-child(3) p")?.innerText.trim() ||
+    "Find out more";
+
+  // Create the new HTML structure
+  const newSection = document.createElement("div");
+  newSection.className = "cc-wrapper O-COLCTRL-RW-DEV";
+  newSection.setAttribute("role", "region");
+  newSection.innerHTML = `
+    <div id="hp_rel_columnControl_4">
+      <div class="cc cc-columns-33-66">
+        <div id="hp_rel_columnControlColumn_7" class="cc-column">
+          <div class="M-IMG-RW-DEV">
+            <div id="hp_rel_image_13" class="crh-smart-image crh-smart-image--landscape">
+              <a class="smart-image-content" href="${fullLink}" target="_blank" rel="noopener">
+                <span class="visuallyhidden">This link will open in a new window</span>
+                <div class="smart-image-content crh-media-aspect-ratio-container">
+                  <picture id="hp_rel_image_14">
+                    <source srcset="${imageSrc}" media="(min-width: 960px)" />
+                    <source srcset="${imageSrc}" media="(min-width: 480px)" />
+                    <source srcset="${imageSrc} 1x, ${imageSrc} 2x" />
+                    <img
+                      id="hp_rel_image_15"
+                      class="A-IMAGE-RW-ALL crh-media-aspect-ratio-container__media-inside"
+                      role="img"
+                      src="${imageSrc}"
+                      alt="Logo of FSCS - Protecting your money"
+                    />
+                  </picture>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div id="hp_rel_columnControlColumn_8" class="cc-column">
+          <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text" role="region">
+            <div id="hp_rel_richtext_6" class="remove-bottom-space A-PAR16R-RW-ALL-WRAPPER">
+              <p class="A-PAR16R-RW-ALL">${p1}</p>
+              <p class="A-PAR16R-RW-ALL">${p2}</p>
+              <p class="A-PAR16R-RW-ALL">${p3}</p>
+            </div>
+          </div>
+
+          <div class="O-SMARTSPCGEN-DEV M-CONTMAST-RW-RBWM links" role="region">
+            <div>
+              <ul id="hp_rel_links_5" class="links-list">
+                <li>
+                  <div id="hp_rel_link_5" class="link-container">
+                    <a class="A-LNKST-RW-ALL" href="${
+                      new URL(fullLink).pathname
+                    }" target="_self">
+                      <span aria-hidden="true" class="link">${linkText}</span>
+                      <span class="icon icon-chevron-right" aria-hidden="true"></span>
+                      <span class="visuallyhidden">${linkText} about FSCS </span>
+                    </a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Append the section to <main>
+  document.querySelector("main")?.appendChild(newSection);
 }
