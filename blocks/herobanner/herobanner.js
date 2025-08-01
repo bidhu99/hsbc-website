@@ -16,32 +16,32 @@ function parseHeroBanner() {
 
   const primary = {
     title: h2,
-    description: paragraphs[2] || '',
-    ctaText: paragraphs[4]?.replace(/`/g, '') || '',
-    ctaLink: paragraphs[5] || '',
-    secondaryDescription: paragraphs[6] || '',
+    description: paragraphs[1] || '',
+    ctaText: paragraphs[2]?.replace(/`/g, '') || '',
+    ctaLink: paragraphs[3] || '',
+    secondaryDescription: paragraphs[4] || '',
     image: img
   };
 
   const cards = [];
 
   // Card 1 - Going abroad
-  if (paragraphs[7]) {
+  if (paragraphs[5]) {
     cards.push({
-      title: paragraphs[7],
-      description: paragraphs[8] || '',
-      linkText: paragraphs[9] || '',
-      linkHref: wrapper.querySelectorAll('a')[0]?.getAttribute('href') || ''
+      title: paragraphs[5],
+      description: paragraphs[6] || '',
+      linkText: paragraphs[7] || '',
+      linkHref: wrapper.querySelectorAll('a')[8]?.getAttribute('href') || ''
     });
   }
 
   // Card 2 - Wealth Insights
-  if (paragraphs[10]) {
+  if (paragraphs[9]) {
     cards.push({
-      title: paragraphs[10],
-      description: paragraphs[11] || '',
-      linkText: paragraphs[12] || '',
-      linkHref: wrapper.querySelectorAll('a')[1]?.getAttribute('href') || ''
+      title: paragraphs[9],
+      description: paragraphs[10] || '',
+      linkText: paragraphs[11] || '',
+      linkHref: wrapper.querySelectorAll('a')[12]?.getAttribute('href') || ''
     });
   }
 
@@ -76,7 +76,7 @@ function renderHeroBanner(json) {
                   </h2>
                   <div id="par_hero_description_1">
                     <div class="crh-hero-banner__main-lead A-TYPS5R-RW-DEV text-container text" et-event-counter="1">
-                      ${json.ctaText}
+                      ${json.mainDescription}
                     </div>
                   </div>
                   <div class="crh-hero-banner__main-buttons-wrapper">
@@ -84,8 +84,8 @@ function renderHeroBanner(json) {
                       <a class="crh-button crh-link-button crh-button-primary crh-hero-banner__main-button"
                         href="${json.ctaLink}" target="_blank" rel="noopener"
                         data-event-name="${json.ctaText}">
-                        <span aria-hidden="true">${json.mainDescription}</span>
-                        <span class="visuallyhidden">${json.mainDescription} This link will open in a new window</span>
+                        <span aria-hidden="true">${json.ctaText}</span>
+                        <span class="visuallyhidden">${json.ctaText} This link will open in a new window</span>
                       </a>
                     </div>
                   </div>
