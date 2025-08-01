@@ -38,6 +38,9 @@ export default function decorate(block) {
             main.appendChild(generatedHtml);
         }
     }
+    if (block.classList.contains("single")) {
+      imageWithTextSingle();
+    }
 }
 
 function createSurveyHTML(surveyData) {
@@ -274,4 +277,85 @@ function createHtmlFromData(data) {
     wrapper.appendChild(columnControlWrapper);
 
     return wrapper;
+}
+
+function imageWithTextSingle(){
+  // Get the source HTML container
+  const sourceBlock = document.querySelector('.imagewithtext-wrapper .imagewithtext.single');
+
+  // Extract image URL
+  const imageSrc = sourceBlock.querySelector('img')?.getAttribute('src') || '';
+
+  // Extract paragraph content
+  const paragraphs = sourceBlock.querySelectorAll('p');
+  const p1 = paragraphs[0]?.innerHTML.trim() || '';
+  const p2 = paragraphs[1]?.innerText.trim() || '';
+  const p3 = paragraphs[2]?.innerText.trim() || '';
+
+  // Extract link href and display text
+  const fullLink = sourceBlock.querySelector('a')?.getAttribute('href') || '';
+  const linkText = sourceBlock.querySelector('div:nth-child(3) p')?.innerText.trim() || 'Find out more';
+
+  // Create the new HTML structure
+  const newSection = document.createElement('div');
+  newSection.className = 'cc-wrapper O-COLCTRL-RW-DEV';
+  newSection.setAttribute('role', 'region');
+  newSection.innerHTML = `
+    <div id="hp_rel_columnControl_4">
+      <div class="cc cc-columns-33-66">
+        <div id="hp_rel_columnControlColumn_7" class="cc-column">
+          <div class="M-IMG-RW-DEV">
+            <div id="hp_rel_image_13" class="crh-smart-image crh-smart-image--landscape">
+              <a class="smart-image-content" href="${fullLink}" target="_blank" rel="noopener">
+                <span class="visuallyhidden">This link will open in a new window</span>
+                <div class="smart-image-content crh-media-aspect-ratio-container">
+                  <picture id="hp_rel_image_14">
+                    <source srcset="${imageSrc}" media="(min-width: 960px)" />
+                    <source srcset="${imageSrc}" media="(min-width: 480px)" />
+                    <source srcset="${imageSrc} 1x, ${imageSrc} 2x" />
+                    <img
+                      id="hp_rel_image_15"
+                      class="A-IMAGE-RW-ALL crh-media-aspect-ratio-container__media-inside"
+                      role="img"
+                      src="${imageSrc}"
+                      alt="Logo of FSCS - Protecting your money"
+                    />
+                  </picture>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div id="hp_rel_columnControlColumn_8" class="cc-column">
+          <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text" role="region">
+            <div id="hp_rel_richtext_6" class="remove-bottom-space A-PAR16R-RW-ALL-WRAPPER">
+              <p class="A-PAR16R-RW-ALL">${p1}</p>
+              <p class="A-PAR16R-RW-ALL">${p2}</p>
+              <p class="A-PAR16R-RW-ALL">${p3}</p>
+            </div>
+          </div>
+
+          <div class="O-SMARTSPCGEN-DEV M-CONTMAST-RW-RBWM links" role="region">
+            <div>
+              <ul id="hp_rel_links_5" class="links-list">
+                <li>
+                  <div id="hp_rel_link_5" class="link-container">
+                    <a class="A-LNKST-RW-ALL" href="${new URL(fullLink).pathname}" target="_self">
+                      <span aria-hidden="true" class="link">${linkText}</span>
+                      <span class="icon icon-chevron-right" aria-hidden="true"></span>
+                      <span class="visuallyhidden">${linkText} about FSCS </span>
+                    </a>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Append the section to <main>
+  document.querySelector('main')?.appendChild(newSection);
 }
