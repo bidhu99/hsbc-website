@@ -3,10 +3,40 @@ import {
 } from '../../scripts/aem.js';
 
 export default function decorate(block) {
-    if(block.classList.contains("right")){
-      const surveyJson = extractSurveyData();
-      appendToMain(surveyJson);
-      appendImageItem(surveyJson);
+    if (block.classList.contains("right")) {
+        const surveyJson = extractSurveyData();
+        appendToMain(surveyJson);
+        appendImageItem(surveyJson);
+    }
+    if (block.classList.contains("below")) {
+        // Step 1: Extract relevant data and filter valid entries
+        const imageTextBlocks = block.querySelectorAll('.imagewithtext-wrapper .imagewithtext > div');
+
+        const filteredAppFraudData = [];
+
+        imageTextBlocks.forEach(individualBlock => {
+            const img = individualBlock.querySelector('img')?.getAttribute('src') || '';
+            const paragraphs = individualBlock.querySelectorAll('p');
+            const heading = paragraphs[0]?.textContent.trim() || '';
+            const description = paragraphs[1]?.textContent.trim() || '';
+            const link = individualBlock.querySelector('a')?.getAttribute('href') || '';
+
+            // Only add items that have a valid image, heading, description, and link
+            if (img && heading && description && link) {
+                filteredAppFraudData.push({
+                    image: img,
+                    heading: heading,
+                    description: description,
+                    link: link
+                });
+            }
+        });
+
+        const main = document.querySelector('main');
+        if (main) {
+            const generatedHtml = createHtmlFromData(filteredAppFraudData);
+            main.appendChild(generatedHtml);
+        }
     }
 }
 
@@ -184,4 +214,64 @@ function extractSurveyData() {
         subTitle,
         sections
     };
+}
+
+function createHtmlFromData(data) {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'cc-wrapper O-COLCTRL-RW-DEV';
+    wrapper.setAttribute('role', 'region');
+
+    const columnControl = document.createElement('div');
+    columnControl.className = 'cc cc-columns-50-50 cc-mobile-reflow';
+
+    data.forEach((item, index) => {
+        const column = document.createElement('div');
+        column.className = 'cc-column';
+
+        column.innerHTML = `
+      <div class="M-IMG-RW-DEV O-SMARTSPCGEN-DEV" role="region">
+        <div class="smart-image">
+          <figure class="smart-image-figure">
+            <picture>
+              <img class="A-IMAGE-RW-ALL smart-image-img" src="${item.image}" alt="${item.heading}" width="550" height="350" />
+            </picture>
+          </figure>
+        </div>
+      </div>
+
+      <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV" role="region">
+        <h3 class="heading A-TYP22L-RW-ALL remove-bottom-space">${item.heading}</h3>
+      </div>
+
+      <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text" role="region">
+        <div class="A-PAR16R-RW-ALL-WRAPPER">
+          <p class="A-PAR16R-RW-ALL">${item.description}</p>
+        </div>
+      </div>
+
+      <div class="O-SMARTSPCGEN-DEV M-CONTMAST-RW-RBWM links" role="region">
+        <div>
+          <ul class="links-list">
+            <li>
+              <div class="link-container">
+                <a class="A-LNKST-RW-ALL" href="${item.link}" target="_blank" rel="noopener" data-event-component="text link" data-event-name="See full results">
+                  <span aria-hidden="true" class="link">See full results</span>
+                  <span class="icon icon-chevron-right" aria-hidden="true"></span>
+                  <span class="visuallyhidden">See full results. This link will open in a new window</span>
+                </a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    `;
+
+        columnControl.appendChild(column);
+    });
+
+    const columnControlWrapper = document.createElement('div');
+    columnControlWrapper.appendChild(columnControl);
+    wrapper.appendChild(columnControlWrapper);
+
+    return wrapper;
 }
