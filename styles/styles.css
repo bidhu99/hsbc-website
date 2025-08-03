@@ -116,16 +116,6 @@ h6 {
     font-size: var(--heading-font-size-xs);
 }
 
-p,
-dl,
-ol,
-ul,
-pre,
-blockquote {
-    margin-top: 0.8em;
-    margin-bottom: 0.25em;
-}
-
 code,
 pre {
     font-size: var(--body-font-size-s);
@@ -139,9 +129,7 @@ pre {
     white-space: pre;
 }
 
-main > div {
-    margin: 40px 16px;
-}
+
 
 input,
 textarea,

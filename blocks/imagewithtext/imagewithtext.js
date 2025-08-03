@@ -47,11 +47,11 @@ export default function decorate(block) {
 
 function createSurveyHTML(surveyData) {
   const wrapper = document.createElement("div");
-  // wrapper.className = "grid";
+  wrapper.className = "row";
 
   // Build inner HTML structure
   wrapper.innerHTML = `
-  <div class="cc-wrapper O-COLCTRL-RW-DEV" role="region">
+  <div class="cc-wrapper O-COLCTRL-RW-DEV sm-12" role="region">
     <div id="hp_main_columnControl_2">
       <div class="cc cc-columns-66-33">
         <div id="hp_main_columnControlColumn_5" class="cc-column">
@@ -95,13 +95,13 @@ function appendImageItem(surveyData) {
   }
   surveyData.sections.forEach((section, index) => {
     const sectionWrapper = document.createElement("div");
-    // sectionWrapper.className = "grid";
+    sectionWrapper.className = "row";
 
     const sectionId = index === 0 ? "gb" : "ni";
     const anchorId = section.region.toLowerCase().replace(/\s+/g, "-");
 
     sectionWrapper.innerHTML = `
-      <div class="cc-wrapper O-COLCTRL-RW-DEV" role="region">
+      <div class="cc-wrapper O-COLCTRL-RW-DEV sm-12" role="region">
         <div id="hp_main_columnControl_${index + 3}">
           <div class="cc cc-columns-50-50 cc-mobile-reflow">
             <div id="hp_main_columnControlColumn_${
@@ -232,7 +232,7 @@ function extractSurveyData() {
 
 function createHtmlFromData(data) {
   const wrapper = document.createElement("div");
-  wrapper.className = "cc-wrapper O-COLCTRL-RW-DEV";
+  wrapper.className = "cc-wrapper O-COLCTRL-RW-DEV row";
   wrapper.setAttribute("role", "region");
 
   const columnControl = document.createElement("div");
@@ -284,6 +284,7 @@ function createHtmlFromData(data) {
   });
 
   const columnControlWrapper = document.createElement("div");
+  columnControlWrapper.classList.add("sm-12");
   columnControlWrapper.appendChild(columnControl);
   wrapper.appendChild(columnControlWrapper);
 
@@ -313,10 +314,10 @@ function imageWithTextSingle() {
 
   // Create the new HTML structure
   const newSection = document.createElement("div");
-  newSection.className = "cc-wrapper O-COLCTRL-RW-DEV";
+  newSection.className = "cc-wrapper O-COLCTRL-RW-DEV row";
   newSection.setAttribute("role", "region");
   newSection.innerHTML = `
-    <div id="hp_rel_columnControl_4">
+    <div id="hp_rel_columnControl_4" class="sm-12">
       <div class="cc cc-columns-33-66">
         <div id="hp_rel_columnControlColumn_7" class="cc-column">
           <div class="M-IMG-RW-DEV">

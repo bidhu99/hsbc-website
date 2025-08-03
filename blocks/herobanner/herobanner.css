@@ -1,0 +1,27 @@
+@media screen and (min-width: 80em) {
+    .O-HERO-RW-DEV .crh-hero-banner__main-wrapper {
+        margin-left: 0;
+    }
+}
+
+@media screen and (min-width: 60em) {
+    .O-HERO-RW-DEV .crh-hero-banner {
+        align-content: flex-start;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-bottom: 3rem;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .O-HERO-RW-DEV .crh-hero-banner__card {
+        margin-left: 0;
+    }
+}
+
+@media screen and (max-width: 60rem) {
+    #hero-banner-div {
+        padding: 0;
+    }
+}
