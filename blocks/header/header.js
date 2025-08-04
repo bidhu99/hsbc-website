@@ -115,36 +115,38 @@ async function fetchNav(block, path) {
         const data = await response.text();
 
         const container = document.querySelector('main .text-container');
-        const tempDiv = document.createElement('div');
-        tempDiv.innerHTML = data;
+        if (container != null) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = data;
 
-        // Extract the .primaryheader div (removes the extra outer div)
-        const primaryHeader = tempDiv.querySelector('.primaryheader');
-        container.insertAdjacentHTML('beforeend', primaryHeader.outerHTML);
+            // Extract the .primaryheader div (removes the extra outer div)
+            const primaryHeader = tempDiv.querySelector('.primaryheader');
+            container.insertAdjacentHTML('beforeend', primaryHeader.outerHTML);
 
-        const allBlocks = document.querySelectorAll('.primaryheader > div');
+            const allBlocks = document.querySelectorAll('.primaryheader > div');
 
-        const leftData = [];
-        const rightData = [];
+            const leftData = [];
+            const rightData = [];
 
-        allBlocks.forEach((block, index) => {
-            const name = block.children[0]?.innerText.trim();
-            const url = block.children[1]?.innerText.trim();
+            allBlocks.forEach((block, index) => {
+                const name = block.children[0]?.innerText.trim();
+                const url = block.children[1]?.innerText.trim();
 
-            const obj = {
-                name,
-                url
-            };
+                const obj = {
+                    name,
+                    url
+                };
 
-            if (index < 4) {
-                leftData.push(obj);
-            } else {
-                rightData.push(obj);
-            }
-        });
+                if (index < 4) {
+                    leftData.push(obj);
+                } else {
+                    rightData.push(obj);
+                }
+            });
 
-        appendHeader(leftData, rightData);
-        block.appendChild(generateHeader(leftData, rightData));
+            appendHeader(leftData, rightData);
+            block.appendChild(generateHeader(leftData, rightData));
+        }
 
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
