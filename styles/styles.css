@@ -79,6 +79,7 @@ body {
     font-family: var(--body-font-family);
     font-size: var(--body-font-size-m);
     line-height: 1.6;
+    padding-top: 97px;
 }
 
 body.appear {
@@ -159,4 +160,10 @@ main img {
 .socialMediaFooter  .link-header {
   font-size: 22px;
   font-weight: 300;
+}
+
+@media screen and (max-width: 60em) {
+body {
+  padding-top: 0;
+}
 }
