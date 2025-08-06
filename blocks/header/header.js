@@ -91,6 +91,12 @@ function generateHeader(leftData, rightData) {
         span.className = "primary-button";
       }
       li.appendChild(span);
+      const registerIconSpan = document.createElement("span");
+      registerIconSpan.className = "icon icon-chevron-right-small icon-chevron-down-small";
+      registerIconSpan.setAttribute("aria-hidden", "true");
+      if (item?.name === "Register") {
+        li.appendChild(registerIconSpan);
+      }
       dropdownUl.appendChild(li);
     }
   });
@@ -131,7 +137,7 @@ async function fetchNav(block, path) {
 
     const data = await response.text();
 
-    const container = document.querySelector("main .text-container");
+    const container = document.querySelector("main .section");
     if (container != null) {
       const tempDiv = document.createElement("div");
       tempDiv.innerHTML = data;
