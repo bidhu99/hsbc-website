@@ -319,7 +319,7 @@ function extractHeaderData() {
         }
       });
     }
-    if(firstLevelDivs.length == index+1) {
+    if (firstLevelDivs.length == index + 1) {
       if (links.length > 0) {
         subSection.links = links;
         subSections.push(subSection);
@@ -410,12 +410,9 @@ function buildHeader(data) {
     iconSpan.setAttribute("aria-hidden", "true");
     titleDiv.appendChild(iconSpan);
 
-
-
     const titleSpan = document.createElement("span");
     titleSpan.className = "header-main-navigation-title";
     titleSpan.textContent = section.title;
-
 
     titleDiv.appendChild(titleSpan);
     navItem.appendChild(titleDiv);
@@ -445,7 +442,7 @@ function buildHeader(data) {
     const doormatRow = document.createElement("div");
     doormatRow.className = "row";
 
-    section.subsections.forEach((sub) => {
+    section.subsections.forEach((sub, indx) => {
       const col = document.createElement("div");
       col.className = "doormat-main-column sm-12 lg-4";
 
@@ -478,18 +475,36 @@ function buildHeader(data) {
         linkList.appendChild(li);
       });
 
-      group.appendChild(linkList);
-      content.appendChild(group);
-      col.appendChild(content);
-      doormatRow.appendChild(col);
+      if (section.subsections.length - 1 === indx) {
+        const colHighlight = document.createElement("div");
+        colHighlight.className = "doormat-highlight sm-12 lg-3";
+
+        const highlightMenu = document.createElement("div");
+        highlightMenu.className = "doormat-highlight-menu";
+
+        content.className = "";
+
+        group.appendChild(linkList);
+        content.appendChild(group);
+        highlightMenu.appendChild(content);
+        colHighlight.appendChild(highlightMenu);
+        doormatRow.appendChild(colHighlight);
+      } else {
+        group.appendChild(linkList);
+        content.appendChild(group);
+        col.appendChild(content);
+        doormatRow.appendChild(col);
+      }
     });
 
     doormatMain.appendChild(doormatRow);
     doormatContainer.appendChild(doormatMain);
     doormat.appendChild(doormatContainer);
     navItem.appendChild(doormat);
-
     navList.appendChild(navItem);
+
+    const colHighlight = doormatRow.querySelector(".doormat-highlight");
+    doormatContainer.appendChild(colHighlight);
   });
 
   nav.appendChild(navList);
