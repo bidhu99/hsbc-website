@@ -313,6 +313,20 @@ function extractHeaderData() {
         }
       });
     }
+    if(firstLevelDivs.length == index+1) {
+      if (links.length > 0) {
+        subSection.links = links;
+        subSections.push(subSection);
+        links = [];
+        subSection = {};
+      }
+      if (Object.keys(section).length > 0) {
+        section.subsections = subSections;
+        result.sections.push(section);
+        section = {};
+        subSections = [];
+      }
+    }
   });
   buildHeader(result);
 }
@@ -385,12 +399,30 @@ function buildHeader(data) {
     titleDiv.className = `header-mobile-doormat-${index} header-doormat-mobile-title sidebar-submenu-trigger`;
     titleDiv.dataset.target = `header-doormat-${index}`;
 
+    const iconSpan = document.createElement("span");
+    iconSpan.className = "icon icon-banking hide-on-desktop";
+    iconSpan.setAttribute("aria-hidden", "true");
+    titleDiv.appendChild(iconSpan);
+
+
+
     const titleSpan = document.createElement("span");
     titleSpan.className = "header-main-navigation-title";
     titleSpan.textContent = section.title;
 
+
     titleDiv.appendChild(titleSpan);
     navItem.appendChild(titleDiv);
+
+    const iconRightSpan = document.createElement("span");
+    iconRightSpan.className = "icon icon-chevron-right hide-on-desktop";
+    iconRightSpan.setAttribute("aria-hidden", "true");
+    titleDiv.appendChild(iconRightSpan);
+
+    const subtitleSpan = document.createElement("span");
+    subtitleSpan.className = "header-main-navigation-subtitle";
+    subtitleSpan.textContent = decodeHTMLEntities(section.subTitle);
+    titleDiv.appendChild(subtitleSpan);
 
     // Doormat dropdown
     const doormat = document.createElement("div");
@@ -462,4 +494,10 @@ function buildHeader(data) {
   headerNavWrapper.appendChild(container);
   headerWrapperMain.appendChild(headerNavWrapper);
   header.appendChild(headerWrapperMain);
+}
+
+function decodeHTMLEntities(html) {
+  const txt = document.createElement("textarea");
+  txt.innerHTML = html;
+  return txt.value;
 }
