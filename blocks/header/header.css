@@ -5,3 +5,7 @@
 .header .header-logo img {
   height: auto;
 }
+
+.section{
+    display: none;
+}
