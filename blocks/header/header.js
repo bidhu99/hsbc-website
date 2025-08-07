@@ -531,18 +531,45 @@ function decodeHTMLEntities(html) {
 function buildMobileHeader(headerData) {
 
     // Get the <header> element
-    const header = document.querySelector('header');
+    const header = document.querySelector('header .header-wrapper-main .header-nav-wrapper');
     if (!header) {
         console.error('No <header> tag found in the document.');
     }
 
+    const mainContainer = document.createElement('div');
+    mainContainer.className = "header-mobile";
+
+    const topContainer = document.createElement('div');
+    topContainer.className = "header-mobile-top hide-on-desktop";
+
+
+    const overLayContainer = document.createElement('div');
+    overLayContainer.className = "header-mobile-overlay";
+    overLayContainer.setAttribute('aria-hidden', 'true');
+    overLayContainer.setAttribute('style', 'top: 52.8px;');
+
+    const buttonContainer = document.createElement('button');
+    buttonContainer.className = "header-sidebar-trigger";
+    buttonContainer.setAttribute('aria-label', 'Open menu');
+    buttonContainer.setAttribute('data-aria-label-open-menu', 'Open menu');
+    buttonContainer.setAttribute('data-aria-label-close-menu', 'Close menu');
+
+    const buttonSpan = document.createElement('span');
+    buttonSpan.className = "icon icon-menu";
+    buttonContainer.setAttribute('aria-hidden', 'true');
+    buttonContainer.appendChild(buttonSpan);
+
+    const buttonSliderSpan = document.createElement('span');
+    buttonSpan.className = "header-sidebar-trigger-text";
+    buttonContainer.textContent = "Menu";
+    buttonContainer.appendChild(buttonSliderSpan);
+    topContainer.appendChild(buttonContainer);
+
     // === 1. Render the Logo ===
     const logoDiv = document.createElement('div');
-    logoDiv.className = 'header-logo';
+    logoDiv.className = 'header-mobile-logo';
 
-    const logoLink = document.createElement('a');
-    logoLink.href = '/'; // Adjust as needed
-    logoLink.setAttribute('aria-label', 'HSBC Home');
+    const logoSpan = document.createElement('apan');
 
     const logoImg = document.createElement('img');
     logoImg.src = headerData.logo.image.src;
@@ -550,13 +577,33 @@ function buildMobileHeader(headerData) {
     logoImg.width = headerData.logo.image.width;
     logoImg.height = headerData.logo.image.height;
 
-    logoLink.appendChild(logoImg);
-    logoDiv.appendChild(logoLink);
-    header.appendChild(logoDiv);
+    logoSpan.appendChild(logoImg);
+    logoDiv.appendChild(logoSpan);
+
+    const navContainer = document.createElement('nav');
+    navContainer.className = "header-mobile-sidebar hide-on-desktop";
+    navContainer.id = "sidebar";
+
+    const divInsideNav = document.createElement('div');
+    divInsideNav.className = "header-mobile-sidebar-content";
+
+    const closeSubMenuContainer = document.createElement('div');
+    closeSubMenuContainer.className = "close-submenu-trigger hidden";
+    closeSubMenuContainer.setAttribute('role', 'button');
+    closeSubMenuContainer.setAttribute('tabindex', '0');
+    closeSubMenuContainer.setAttribute('aria-label', 'Close Submenu');
+
+    const closeSubMenuSpan = document.createElement('span');
+    closeSubMenuSpan.className = "icon icon-chevron-left";
+    closeSubMenuSpan.setAttribute('aria-hidden', 'true');
+    closeSubMenuContainer.appendChild(closeSubMenuSpan);
+    divInsideNav.appendChild(closeSubMenuContainer);
+
 
     // === 2. Create the mobile nav menu container ===
     const ul = document.createElement('ul');
     ul.className = 'header-mobile-doormat';
+    ul.setAttribute('role', 'menubar');
 
     // === 3. Loop through each section ===
     headerData.sections.forEach((section, sectionIndex) => {
@@ -572,17 +619,38 @@ function buildMobileHeader(headerData) {
         triggerDiv.setAttribute('role', 'menuitem');
         triggerDiv.setAttribute('aria-haspopup', 'true');
 
+        const individualIconSpan = document.createElement('span');
+        if(sectionIndex == 0){
+          individualIconSpan.className = "icon icon-banking hide-on-desktop";
+        }else if(sectionIndex == 1){
+          individualIconSpan.className = "icon icon-borrowing hide-on-desktop";
+        }else if(sectionIndex == 2){
+          individualIconSpan.className = "icon icon-investment hide-on-desktop";
+        }else if(sectionIndex == 3){
+          individualIconSpan.className = "icon icon-insurance hide-on-desktop";
+        }else if(sectionIndex == 4){
+          individualIconSpan.className = "icon icon-health hide-on-desktop";
+        }else if(sectionIndex == 5){
+          individualIconSpan.className = "icon icon-help hide-on-desktop";
+        }
+        individualIconSpan.setAttribute("aria-hidden","true");
+        triggerDiv.appendChild(individualIconSpan);
+
         const titleSpan = document.createElement('span');
         titleSpan.className = 'header-main-navigation-title';
         titleSpan.textContent = section.title;
+        triggerDiv.appendChild(titleSpan);
+
+        const individualIconDesktopSpan = document.createElement('span');
+        individualIconDesktopSpan.className = "icon icon-chevron-right hide-on-desktop";
+        individualIconDesktopSpan.setAttribute("aria-hidden","true");
+        triggerDiv.appendChild(individualIconSpan);
 
         const subTitleSpan = document.createElement('span');
         subTitleSpan.className = 'header-main-navigation-subtitle';
-        // Convert &amp; etc. into characters
         subTitleSpan.innerHTML = section.subTitle;
-
-        triggerDiv.appendChild(titleSpan);
         triggerDiv.appendChild(subTitleSpan);
+
         li.appendChild(triggerDiv);
 
         // === Submenu structure ===
@@ -657,7 +725,11 @@ function buildMobileHeader(headerData) {
 
         ul.appendChild(li);
     });
-
-    // Append menu to header
-    header.appendChild(ul);
+    divInsideNav.appendChild(ul);
+    navContainer.appendChild(divInsideNav);
+    topContainer.appendChild(navContainer);
+    topContainer.appendChild(overLayContainer);
+    topContainer.appendChild(logoDiv);
+    mainContainer.appendChild(topContainer);
+    header.appendChild(mainContainer);
 }
