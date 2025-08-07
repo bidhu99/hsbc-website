@@ -1,11 +1,41 @@
 .header.grid.header-no-patternlab {
-  position: fixed;
+    position: fixed;
 }
 
 .header .header-logo img {
-  height: auto;
+    height: auto;
 }
 
-.section{
+.section {
     display: none;
+}
+
+.header .header-sidebar-trigger-text {
+    font-size: 16px;
+}
+
+.header .header-main-container.hide-on-mobile-and-tablet .header-logo a {
+    display: flex;
+}
+
+@media screen and (max-width: 60em) {
+    .header .header-mobile-logo,
+    .header .header-mobile-logo span {
+        display: flex;
+        align-items: center;
+    }
+
+    .header .header-mobile-sidebar-footer.header-dropdown {
+        top: 493px;
+    }
+
+    .header .header-mobile-top {
+        display: flex;
+        align-items: center;
+    }
+
+    .header .header-sidebar-trigger {
+        display: flex;
+        align-items: center;
+    }
 }
