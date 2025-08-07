@@ -99,10 +99,10 @@ function renderHeroFromJSON(json) {
                                     <div id="pp_intro_image_4" class="smart-image">
                                         <figure class="smart-image-figure">
                                             <picture id="pp_intro_image_5">
-                                                <source srcset="/content/dam/hsbc/gb/images/accounts/logos/11570-cass-129x60.png 1x" media="(min-width: 960px)" />
-                                                <source srcset="/content/dam/hsbc/gb/images/accounts/logos/11570-cass-129x60.png 1x" media="(min-width: 480px)" />
-                                                <source srcset="/content/dam/hsbc/gb/images/accounts/logos/11570-cass-129x60.png 1x" />
-                                                <img id="pp_intro_image_6" class="A-IMAGE-RW-ALL smart-image-img" role="img" src="/content/dam/hsbc/gb/images/accounts/logos/11570-cass-129x60.png" alt="" />
+                                                <source srcset="${json.image}" media="(min-width: 960px)" />
+                                                <source srcset="${json.image}" media="(min-width: 480px)" />
+                                                <source srcset="${json.image}" />
+                                                <img id="pp_intro_image_6" class="A-IMAGE-RW-ALL smart-image-img" role="img" src="${json.image}" alt="${json.altText}" />
                                             </picture>
                                         </figure>
                                     </div>

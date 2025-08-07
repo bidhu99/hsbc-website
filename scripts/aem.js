@@ -583,6 +583,24 @@ function decorateBlock(block) {
     const section = block.closest('.section');
     if (section) section.classList.add(`${shortBlockName}-container`);
   }
+  addHtmlToDom();
+}
+
+function addHtmlToDom(){
+  if(window.location.href.includes("/current-accounts/products/premier")){
+    const mainContainer = document.createElement("div");
+    mainContainer.className = "row with-bg";
+
+    const subContainer = document.createElement("div");
+    subContainer.className = "sm-12";
+
+    mainContainer.appendChild(subContainer);
+    const mainTagContainer = document.querySelector("main");
+
+    if(document.querySelectorAll("main .with-bg").length < 3){
+      mainTagContainer.appendChild(mainContainer);
+    }
+  }
 }
 
 /**
