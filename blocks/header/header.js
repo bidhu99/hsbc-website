@@ -175,14 +175,14 @@ async function fetchNav(block, path) {
 
             appendHeader(leftData, rightData);
             block.appendChild(generateHeader(leftData, rightData));
-            extractHeaderData();
+            extractHeaderData(leftData);
         }
     } catch (error) {
         console.error("There was a problem with the fetch operation:", error);
     }
 }
 
-function extractHeaderData() {
+function extractHeaderData(leftData) {
     const parent = document.querySelector("main .section .header");
     const firstLevelDivs = Array.from(parent.children).filter(
         (child) => child.tagName === "DIV"
@@ -339,7 +339,7 @@ function extractHeaderData() {
         }
     });
     buildHeader(result);
-    buildMobileHeader(result);
+    buildMobileHeader(result,leftData);
 }
 
 function readDataFromParagraphTag(childBlock) {
@@ -528,7 +528,7 @@ function decodeHTMLEntities(html) {
     return txt.value;
 }
 
-function buildMobileHeader(headerData) {
+function buildMobileHeader(headerData,leftData) {
 
     // Get the <header> element
     const header = document.querySelector('header .header-wrapper-main .header-nav-wrapper');
@@ -725,7 +725,35 @@ function buildMobileHeader(headerData) {
 
         ul.appendChild(li);
     });
+
+    const singleRedirectionContainer = document.createElement('div');
+    singleRedirectionContainer.className = 'header-mobile-sidebar-footer header-dropdown';
+
+    const businessLinkUl = document.createElement('ul');
+    businessLinkUl.className = "header-mobile-business-links";
+
+    leftData.forEach((businessLink,businessIndex) => {
+      const individualBusinessLink = document.createElement('li');
+
+      const businessLinkAnchor = document.createElement('a');
+      businessLinkAnchor.className = "header-mobile-business-item register-button";
+      businessLinkAnchor.href = businessLink.url;
+      businessLinkAnchor.text = businessLink.name;
+      businessLinkAnchor.setAttribute('data-event-component', "topnav");
+      businessLinkAnchor.setAttribute('data-event-name', businessLink.name);
+
+      const iconSpanContainer = document.createElement('span');
+      iconSpanContainer.className = "icon icon-chevron-right icon-chevron-down-small";
+      iconSpanContainer.setAttribute('aria-hidden', "true");
+
+      businessLinkAnchor.appendChild(iconSpanContainer);
+      individualBusinessLink.appendChild(businessLinkAnchor);
+      businessLinkUl.appendChild(individualBusinessLink);
+    });
+    singleRedirectionContainer.appendChild(businessLinkUl);
+
     divInsideNav.appendChild(ul);
+    divInsideNav.appendChild(singleRedirectionContainer);
     navContainer.appendChild(divInsideNav);
     topContainer.appendChild(navContainer);
     topContainer.appendChild(overLayContainer);
