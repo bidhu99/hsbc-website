@@ -176,6 +176,7 @@ async function fetchNav(block, path) {
             appendHeader(leftData, rightData);
             block.appendChild(generateHeader(leftData, rightData));
             extractHeaderData(leftData);
+            offerBarData();
         }
     } catch (error) {
         console.error("There was a problem with the fetch operation:", error);
@@ -760,4 +761,62 @@ function buildMobileHeader(headerData,leftData) {
     topContainer.appendChild(logoDiv);
     mainContainer.appendChild(topContainer);
     header.appendChild(mainContainer);
+}
+
+function offerBarData(){
+  const offerbarRoot = document.querySelector('.offerbar-wrapper .offerbar');
+  const codeElements = offerbarRoot.querySelectorAll('code');
+
+  const bannerJSON = {
+    banner: {
+      message: codeElements[0]?.textContent.trim() || '',
+      link: {
+        href: codeElements[3]?.textContent.trim() || '',
+        text: codeElements[1]?.textContent.trim() || '',
+        visuallyHiddenText: codeElements[2]?.textContent.trim() || ''
+      }
+    }
+  };
+  offerBar(bannerJSON);
+}
+
+function offerBar(bannerData){
+  const header = document.querySelector('header .header-wrapper-main .header-nav-wrapper');
+
+    const headerWrapperMain = document.createElement("div");
+    headerWrapperMain.className = "header-wrapper-main";
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "O-PINBANNER-RW-ALL";
+    wrapper.setAttribute("aria-hidden", "false");
+    wrapper.style.bottom = "-84.6px";
+
+    wrapper.innerHTML = `
+      <div class="grid">
+        <div class="row">
+          <div id="pp_intro_pinnedBanner_1" class="pinned-wrapper sm-12">
+            <div class="A-PINBANNER-TITLE-RW-ALL text-container text">
+              ${bannerData.banner.message}
+            </div>
+            <div class="action-buttons">
+              <div class="secondary-button">
+                <div>
+                  <a class="A-BTNPINSEC-RW-ALL"
+                     href="${bannerData.banner.link.href}"
+                     target="_self"
+                     id="pp_intro_button_2"
+                     data-event-component="button"
+                     data-event-name="find out more|component:pin banner|position:1">
+                    <span aria-hidden="true">${bannerData.banner.link.text}</span>
+                    <span class="visuallyhidden">${bannerData.banner.link.visuallyHiddenText}</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    header.appendChild(wrapper);
 }
