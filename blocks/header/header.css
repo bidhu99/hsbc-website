@@ -38,4 +38,18 @@
         display: flex;
         align-items: center;
     }
+
+    .header .close-submenu-trigger {
+        z-index: 1;
+    }
+
+    .header .close-submenu-trigger.hidden {
+        z-index: 0;
+    }
+
+    .header .header-mobile-sidebar.expanded,
+    .header .header-mobile-sidebar.expanded + .header-mobile-overlay,
+    .header .header-mobile-sidebar.submenu-expanded .close-submenu-trigger {
+        text-decoration: none;
+    }
 }

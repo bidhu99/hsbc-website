@@ -562,28 +562,62 @@ function handleMobileMenu() {
     body.classList.add("sidebar-open");
     mobileSidebar.classList.add("expanded");
     mobileSidebar.classList.add("active");
-    console.log(body, "click");
   });
 
   document.addEventListener("click", () => {
     body.classList.remove("sidebar-open");
     mobileSidebar.classList.remove("expanded");
     mobileSidebar.classList.remove("active");
+    closeSubmenuDrawer();
   });
 }
 
-function handleMobileSubMenu(e, currentTarget) {
+function closeSubmenuDrawer() {
+  const allLi = document.querySelectorAll(".header-main-navigation-item");
+  allLi.forEach((item) => {
+    item.classList.remove("expanded");
+    item.classList.remove("active");
+
+    const div = item.querySelector(".header-doormat-mobile-title");
+
+    div.classList.remove("expanded");
+    div.classList.remove("active");
+
+    const submenuDiv = item.querySelector(".doormat-menu");
+    submenuDiv.classList.remove("expanded");
+    submenuDiv.classList.remove("active");
+  });
+}
+
+function closeMobileSubMenu() {
+  const closeBtn = document.querySelector(".close-submenu-trigger");
+  const mobileSidebar = document.querySelector(".header-mobile-sidebar");
+
+  closeBtn.addEventListener("click", function () {
+    mobileSidebar.classList.remove("submenu-expanded");
+    closeBtn.classList.add("hidden");
+    closeSubmenuDrawer();
+  });
+}
+
+function opneMobileSubMenu(e, currentTarget) {
   e.stopPropagation();
+  closeSubmenuDrawer();
+
   const closeSubmenuIcon = document.querySelector(".close-submenu-trigger");
-  e.target.classList.add("expanded");
-  e.target.classList.add("active");
+  const mobileSidebar = document.querySelector(".header-mobile-sidebar");
+
+  const div = currentTarget.querySelector(".header-doormat-mobile-title");
+  div.classList.add("expanded");
+  div.classList.add("active");
   closeSubmenuIcon.classList.remove("hidden");
 
   const li = currentTarget.querySelector(".doormat-menu");
   li.classList.add("expanded");
   li.classList.add("active");
 
-  console.log("handle Submenu", e, currentTarget, li);
+  mobileSidebar.classList.add("submenu-expanded");
+  closeMobileSubMenu();
 }
 
 function buildMobileHeader(headerData, leftData) {
@@ -615,7 +649,6 @@ function buildMobileHeader(headerData, leftData) {
   const buttonIconSpan = document.createElement("span");
   buttonIconSpan.className = "icon icon-menu";
   buttonContainer.setAttribute("aria-hidden", "true");
-  //   console.log(buttonSpan, "ButtonSpan");
 
   buttonContainer.appendChild(buttonIconSpan);
 
@@ -656,7 +689,9 @@ function buildMobileHeader(headerData, leftData) {
   const closeSubMenuSpan = document.createElement("span");
   closeSubMenuSpan.className = "icon icon-chevron-left";
   closeSubMenuSpan.setAttribute("aria-hidden", "true");
+
   closeSubMenuContainer.appendChild(closeSubMenuSpan);
+
   divInsideNav.appendChild(closeSubMenuContainer);
 
   // === 2. Create the mobile nav menu container ===
@@ -729,7 +764,7 @@ function buildMobileHeader(headerData, leftData) {
     const rowDiv = document.createElement("div");
     rowDiv.className = "row";
 
-    section.subsections.forEach((subsection) => {
+    section.subsections.forEach((subsection, indx) => {
       const columnDiv = document.createElement("div");
       columnDiv.className = "doormat-main-column sm-12 lg-4";
 
@@ -772,21 +807,35 @@ function buildMobileHeader(headerData, leftData) {
         ulLinks.appendChild(linkLi);
       });
 
-      groupDiv.appendChild(ulLinks);
-      contentDiv.appendChild(groupDiv);
-      columnDiv.appendChild(contentDiv);
-      rowDiv.appendChild(columnDiv);
+      if (section.subsections.length - 1 === indx) {
+        const colHighlight = document.createElement("div");
+        colHighlight.className = "doormat-highlight sm-12 lg-3";
+
+        const highlightMenu = document.createElement("div");
+        highlightMenu.className = "doormat-highlight-menu";
+
+        contentDiv.className = "";
+
+        groupDiv.appendChild(ulLinks);
+        contentDiv.appendChild(groupDiv);
+        highlightMenu.appendChild(contentDiv);
+        colHighlight.appendChild(highlightMenu);
+        containerDiv.appendChild(colHighlight);
+      } else {
+        groupDiv.appendChild(ulLinks);
+        contentDiv.appendChild(groupDiv);
+        columnDiv.appendChild(contentDiv);
+        rowDiv.appendChild(columnDiv);
+        mainDiv.appendChild(rowDiv);
+        containerDiv.appendChild(mainDiv);
+      }
     });
 
-    mainDiv.appendChild(rowDiv);
-    containerDiv.appendChild(mainDiv);
     submenuDiv.appendChild(containerDiv);
     li.appendChild(submenuDiv);
 
     li.addEventListener("click", function (e) {
-      console.log("target:", e.target);
-      console.log("currentTarget:", e.currentTarget);
-      handleMobileSubMenu(e, e.currentTarget); // Only when <li> itself is clicked
+      opneMobileSubMenu(e, e.currentTarget); // Only when <li> itself is clicked
     });
 
     ul.appendChild(li);
