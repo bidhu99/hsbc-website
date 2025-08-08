@@ -572,6 +572,20 @@ function handleMobileMenu() {
   });
 }
 
+function handleMobileSubMenu(e, currentTarget) {
+  e.stopPropagation();
+  const closeSubmenuIcon = document.querySelector(".close-submenu-trigger");
+  e.target.classList.add("expanded");
+  e.target.classList.add("active");
+  closeSubmenuIcon.classList.remove("hidden");
+
+  const li = currentTarget.querySelector(".doormat-menu");
+  li.classList.add("expanded");
+  li.classList.add("active");
+
+  console.log("handle Submenu", e, currentTarget, li);
+}
+
 function buildMobileHeader(headerData, leftData) {
   // Get the <header> element
   const header = document.querySelector(
@@ -769,6 +783,12 @@ function buildMobileHeader(headerData, leftData) {
     submenuDiv.appendChild(containerDiv);
     li.appendChild(submenuDiv);
 
+    li.addEventListener("click", function (e) {
+      console.log("target:", e.target);
+      console.log("currentTarget:", e.currentTarget);
+      handleMobileSubMenu(e, e.currentTarget); // Only when <li> itself is clicked
+    });
+
     ul.appendChild(li);
   });
 
@@ -811,35 +831,37 @@ function buildMobileHeader(headerData, leftData) {
   header.appendChild(mainContainer);
 }
 
-function offerBarData(){
-  const offerbarRoot = document.querySelector('.offerbar-wrapper .offerbar');
-  const codeElements = offerbarRoot.querySelectorAll('code');
+function offerBarData() {
+  const offerbarRoot = document.querySelector(".offerbar-wrapper .offerbar");
+  const codeElements = offerbarRoot.querySelectorAll("code");
 
   const bannerJSON = {
     banner: {
-      message: codeElements[0]?.textContent.trim() || '',
+      message: codeElements[0]?.textContent.trim() || "",
       link: {
-        href: codeElements[3]?.textContent.trim() || '',
-        text: codeElements[1]?.textContent.trim() || '',
-        visuallyHiddenText: codeElements[2]?.textContent.trim() || ''
-      }
-    }
+        href: codeElements[3]?.textContent.trim() || "",
+        text: codeElements[1]?.textContent.trim() || "",
+        visuallyHiddenText: codeElements[2]?.textContent.trim() || "",
+      },
+    },
   };
   offerBar(bannerJSON);
 }
 
-function offerBar(bannerData){
-  const header = document.querySelector('header .header-wrapper-main .header-nav-wrapper');
+function offerBar(bannerData) {
+  const header = document.querySelector(
+    "header .header-wrapper-main .header-nav-wrapper"
+  );
 
-    const headerWrapperMain = document.createElement("div");
-    headerWrapperMain.className = "header-wrapper-main";
+  const headerWrapperMain = document.createElement("div");
+  headerWrapperMain.className = "header-wrapper-main";
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "O-PINBANNER-RW-ALL";
-    wrapper.setAttribute("aria-hidden", "false");
-    wrapper.style.bottom = "-84.6px";
+  const wrapper = document.createElement("div");
+  wrapper.className = "O-PINBANNER-RW-ALL";
+  wrapper.setAttribute("aria-hidden", "false");
+  wrapper.style.bottom = "-84.6px";
 
-    wrapper.innerHTML = `
+  wrapper.innerHTML = `
       <div class="grid">
         <div class="row">
           <div id="pp_intro_pinnedBanner_1" class="pinned-wrapper sm-12">
@@ -866,5 +888,5 @@ function offerBar(bannerData){
       </div>
     `;
 
-    header.appendChild(wrapper);
+  header.appendChild(wrapper);
 }
