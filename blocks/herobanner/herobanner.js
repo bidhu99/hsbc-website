@@ -1,68 +1,184 @@
-import { getMetadata } from "../../scripts/aem.js";
+import {
+    getMetadata
+} from "../../scripts/aem.js";
 
 export default function decorate(block) {
-  const heroData = parseHeroBanner();
-  renderHeroBanner(heroData);
+    if (!block.classList.contains("withouttiles")) {
+        const heroData = parseHeroBanner();
+        renderHeroBanner(heroData);
+    }
+    if (block.classList.contains("withouttiles")) {
+        renderHeroFromJSON(getHeroBannerWithoutTilesJson());
+    }
+}
+
+function getHeroBannerWithoutTilesJson() {
+    const herobanner = document.querySelector(".herobanner-wrapper .herobanner");
+    if (!herobanner) return;
+
+    const mainTitle = herobanner.querySelector("h1")?.textContent.trim() || "";
+
+    const image = herobanner.querySelector("img")?.getAttribute("src") || "";
+
+    const description = herobanner.querySelectorAll("div > div > p")[0]?.textContent.trim() || "";
+
+    const ctaText = herobanner.querySelectorAll("code")[0]?.textContent.trim() || "";
+    const ctaLink = herobanner.querySelectorAll("code")[1]?.textContent.trim() || "";
+    const altText = herobanner.querySelectorAll("code")[2]?.textContent.trim() || "";
+
+    const heroJSON = {
+        mainTitle,
+        image,
+        description,
+        ctaText,
+        ctaLink,
+        altText
+    };
+    return heroJSON;
+}
+
+function renderHeroFromJSON(json) {
+    if (!json) return;
+
+    const wrapper = document.querySelector("main");
+    if (!wrapper) return;
+
+    const heroHTML = `
+    <div class="row transparent-bg intro-section has-hero-2 hero-remove-height">
+        <div class="">
+            <div class="O-HERO-RW-DEV">
+                <div class="crh-grid grid O-SMARTSPCGENGRID">
+                    <div id="pp_intro_hero_1" class="crh-hero-banner crh-hero-banner--without-spacing">
+                        <div class="crh-hero-banner__main-wrapper crh-hero-banner__main-wrapper--content-page">
+                            <div>
+                                <div id="pp_intro_hero_banner_1" class="O-HEROCARD-RW-RBWM">
+                                    <h1 class="crh-hero-banner__main-header A-TYPS1R-RW-DEV text-container text">
+                                        ${json.mainTitle}
+                                    </h1>
+                                    <div id="pp_intro_hero_description_1">
+                                        <div class="crh-hero-banner__main-lead A-TYPS5R-RW-DEV text-container text" et-event-counter="4">
+                                            ${json.description}
+                                        </div>
+                                    </div>
+                                    <div class="crh-hero-banner__main-buttons-wrapper">
+                                        <div>
+                                            <a
+                                                class="crh-button crh-link-button crh-button-primary crh-hero-banner__main-button"
+                                                href="${json.ctaLink}"
+                                                target="_self"
+                                                id="pp_intro_button_1"
+                                                data-event-component="button"
+                                                data-event-name="${json.ctaText}|component:hero|position:1"
+                                            >
+                                                <span>${json.ctaText}</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="crh-hero-banner__main-image-wrapper">
+                            <div class="M-IMG-RW-DEV">
+                                <div id="pp_intro_image_1" class="smart-image">
+                                    <figure class="smart-image-figure">
+                                        <picture id="pp_intro_image_2">
+                                            <img
+                                                id="pp_intro_image_3"
+                                                class="A-IMAGE-RW-ALL smart-image-img"
+                                                role="img"
+                                                src="${json.image}"
+                                                alt="${json.altText}"
+                                            />
+                                        </picture>
+                                    </figure>
+                                </div>
+                            </div>
+                            <div class="crh-hero-banner__main-image-wrapper-triangle"></div>
+                            <div class="logo-container">
+                                <div class="logo-wrapper">
+                                    <div id="pp_intro_image_4" class="smart-image">
+                                        <figure class="smart-image-figure">
+                                            <picture id="pp_intro_image_5">
+                                                <source srcset="${json.image}" media="(min-width: 960px)" />
+                                                <source srcset="${json.image}" media="(min-width: 480px)" />
+                                                <source srcset="${json.image}" />
+                                                <img id="pp_intro_image_6" class="A-IMAGE-RW-ALL smart-image-img" role="img" src="${json.image}" alt="${json.altText}" />
+                                            </picture>
+                                        </figure>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pinnedBanner" style="height: 0px;"></div>
+        </div>
+    </div>
+
+  `;
+
+    wrapper.insertAdjacentHTML("beforebegin", heroHTML);
 }
 
 function parseHeroBanner() {
-  const wrapper = document.querySelector(".herobanner-wrapper");
-  if (!wrapper) return null;
+    const wrapper = document.querySelector(".herobanner-wrapper");
+    if (!wrapper) return null;
 
-  const img = wrapper.querySelector("img")?.getAttribute("src") || "";
-  const h2 = wrapper.querySelector("h2")?.textContent.trim() || "";
-  const paras = wrapper.querySelectorAll("p");
-  const paragraphs = Array.from(paras).map((p) => p.textContent.trim());
+    const img = wrapper.querySelector("img")?.getAttribute("src") || "";
+    const h2 = wrapper.querySelector("h2")?.textContent.trim() || "";
+    const paras = wrapper.querySelectorAll("p");
+    const paragraphs = Array.from(paras).map((p) => p.textContent.trim());
 
-  const primary = {
-    title: h2,
-    description: paragraphs[1] || "",
-    ctaText: paragraphs[2]?.replace(/`/g, "") || "",
-    ctaLink: paragraphs[3] || "",
-    secondaryDescription: paragraphs[4] || "",
-    image: img,
-  };
+    const primary = {
+        title: h2,
+        description: paragraphs[1] || "",
+        ctaText: paragraphs[2]?.replace(/`/g, "") || "",
+        ctaLink: paragraphs[3] || "",
+        secondaryDescription: paragraphs[4] || "",
+        image: img,
+    };
 
-  const cards = [];
+    const cards = [];
 
-  // Card 1 - Going abroad
-  if (paragraphs[5]) {
-    cards.push({
-      title: paragraphs[5],
-      description: paragraphs[6] || "",
-      linkText: paragraphs[7] || "",
-      linkHref: wrapper.querySelectorAll("a")[8]?.getAttribute("href") || "",
-    });
-  }
+    // Card 1 - Going abroad
+    if (paragraphs[5]) {
+        cards.push({
+            title: paragraphs[5],
+            description: paragraphs[6] || "",
+            linkText: paragraphs[7] || "",
+            linkHref: wrapper.querySelectorAll("a")[8]?.getAttribute("href") || "",
+        });
+    }
 
-  // Card 2 - Wealth Insights
-  if (paragraphs[9]) {
-    cards.push({
-      title: paragraphs[9],
-      description: paragraphs[10] || "",
-      linkText: paragraphs[11] || "",
-      linkHref: wrapper.querySelectorAll("a")[12]?.getAttribute("href") || "",
-    });
-  }
+    // Card 2 - Wealth Insights
+    if (paragraphs[9]) {
+        cards.push({
+            title: paragraphs[9],
+            description: paragraphs[10] || "",
+            linkText: paragraphs[11] || "",
+            linkHref: wrapper.querySelectorAll("a")[12]?.getAttribute("href") || "",
+        });
+    }
 
-  return {
-    image: primary.image,
-    mainTitle: primary.title,
-    mainDescription: primary.description,
-    ctaText: primary.ctaText,
-    ctaLink: primary.ctaLink,
-    secondaryDescription: primary.secondaryDescription,
-    cards: cards,
-  };
+    return {
+        image: primary.image,
+        mainTitle: primary.title,
+        mainDescription: primary.description,
+        ctaText: primary.ctaText,
+        ctaLink: primary.ctaLink,
+        secondaryDescription: primary.secondaryDescription,
+        cards: cards,
+    };
 }
 
 function renderHeroBanner(json) {
-  if (!json) return;
+    if (!json) return;
 
-  const container = document.querySelector(".multilinks-container");
-  if (!container) return;
+    const container = document.querySelector(".multilinks-container");
+    if (!container) return;
 
-  const heroHTML = `
+    const heroHTML = `
   <div class="row transparent-bg intro-section hero-remove-height">
     <div class="sm-12" id="hero-banner-div">
       <div class="O-HERO-RW-DEV">
@@ -149,5 +265,5 @@ function renderHeroBanner(json) {
     </div>
   </div>`;
 
-  container.insertAdjacentHTML("afterend", heroHTML);
+    container.insertAdjacentHTML("afterend", heroHTML);
 }
