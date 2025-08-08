@@ -3,14 +3,20 @@ import { getMetadata } from "../../scripts/aem.js";
 export default function decorate(block) {
   const sourcePara = document.querySelector(".text-wrapper p");
   const textWrapper = document.querySelector(".text.withheading.block");
-  if (!sourcePara || !textWrapper) {
-    console.warn("Source paragraph not found.");
-  }
   if (block.classList.contains("withoutheading")) {
     textWithOutHeading(sourcePara);
   }
   if (block.classList.contains("withheading")) {
+    if (!sourcePara || !textWrapper) {
+      console.warn("Source paragraph not found.");
+    }
     textWithHeading(textWrapper);
+  }
+  if(block.classList.contains("singleheading")){
+     singleHeader();
+  }
+  if(block.classList.contains("singleheadingsecondvarient")){
+    singleheadingsecondvarient();
   }
 }
 
@@ -105,4 +111,75 @@ function textWithHeading(textWrapper) {
   // Step 5: Append to <main> or another container
   const main = document.querySelector("main") || document.body;
   main.appendChild(wrapper);
+}
+
+function singleHeader(){
+  const secondMainWrapper = document.querySelectorAll("main .with-bg > .sm-12")[1];
+
+  // 1. Get the heading text from your existing block
+  const sourceTextEl = document.querySelector('.text.singleheading.block p code');
+  const headingText = sourceTextEl ? sourceTextEl.textContent.trim() : "";
+
+  // 2. Create the new HTML structure
+  const wrapper = document.createElement('div');
+  wrapper.className = 'cc-wrapper O-COLCTRL-RW-DEV';
+  wrapper.setAttribute('role', 'region');
+
+  wrapper.innerHTML = `
+      <div id="pp_tools_columnControl_2">
+          <div class="cc cc-columns-66-33">
+              <div id="pp_tools_columnControlColumn_2" class="cc-column">
+                  <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV" role="region">
+                      <div class="anchor" id="${headingText.toLowerCase().replace(/\s+/g, '-')}"></div>
+                      <h2 class="heading A-TYP28L-RW-ALL" id="pp_tools_heading_1">
+                          ${headingText}
+                      </h2>
+                  </div>
+              </div>
+              <div id="pp_tools_columnControlColumn_3" class="cc-column"></div>
+          </div>
+      </div>
+  `;
+
+  // 3. Append it wherever you need (example: inside body)
+  secondMainWrapper.appendChild(wrapper);
+}
+
+function singleheadingsecondvarient(){
+  // Step 1: Get the text from the <code> inside .singleheadingsecondvarient
+  const sourceText = document.querySelector(
+    ".text.singleheadingsecondvarient blockquote, .text.singleheadingsecondvarient code, .text.singleheadingsecondvarient p code"
+  )
+    ? document.querySelector(".text.singleheadingsecondvarient p code").textContent.trim()
+    : "";
+
+  // Step 2: Create slug (id-friendly)
+  const slug = sourceText
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, "") // remove non-alphanumeric except spaces/hyphens
+    .replace(/\s+/g, "-");    // spaces → hyphens
+
+  // Step 3: Build the target HTML
+  const html = `
+  <div class="cc-wrapper O-COLCTRL-RW-DEV" role="region">
+    <div id="pp_tools_columnControl_4">
+      <div class="cc cc-columns-66-33">
+        <div id="pp_tools_columnControlColumn_6" class="cc-column">
+          <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV" role="region">
+            <div class="anchor" id="${slug}"></div>
+            <h2 class="heading A-TYP28L-RW-ALL remove-bottom-space" id="pp_tools_heading_2">
+              ${sourceText}
+            </h2>
+          </div>
+        </div>
+        <div id="pp_tools_columnControlColumn_7" class="cc-column"></div>
+      </div>
+    </div>
+  </div>
+  `;
+  const secondMainWrapper = document.querySelectorAll("main .with-bg > .sm-12")[1];
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+  secondMainWrapper.appendChild(temp.firstElementChild);
+
 }
