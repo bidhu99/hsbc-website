@@ -559,6 +559,33 @@ function calculateTopPostionSidenavFooter() {
 }
 
 window.addEventListener("resize", calculateTopPostionSidenavFooter);
+window.addEventListener("scroll", pinnedHeader);
+
+// Pinned Header
+function pinnedHeader() {
+  const distanceFromTop = 200;
+  const scrollTop = window.scrollY; // Vertical scroll
+  const navHeader = document.querySelector(".header-nav-wrapper");
+  const headerTopContainerHeight = document.querySelector(
+    ".header-top-container"
+  )?.innerHeight;
+  const headerMainContainerHeight = document.querySelector(
+    ".header-main-container"
+  )?.innerHeight;
+  const pathname = window.location.pathname;
+
+  if (
+    "/current-accounts/products/premier" === pathname &&
+    scrollTop > distanceFromTop
+  ) {
+    navHeader.classList.add("active-pinned");
+    navHeader.style.transform = `translateY(-${
+      headerMainContainerHeight + headerTopContainerHeight
+    }px)`;
+  } else {
+    navHeader.classList.remove("active-pinned");
+  }
+}
 
 function handleMobileMenu() {
   const menuBtn = document.querySelector(".header-sidebar-trigger");
