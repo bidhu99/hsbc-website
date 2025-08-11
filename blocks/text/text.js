@@ -23,6 +23,27 @@ export default function decorate(block) {
     if (block.classList.contains("textblock")) {
         textBlock();
     }
+    if (block.classList.contains("h3-first")) {
+        h3Heading("h3-first");
+    }
+    if (block.classList.contains("h3-second")) {
+        h3Heading("h3-second");
+    }
+    if (block.classList.contains("subheading-first")) {
+        subheading("subheading-first");
+    }
+    if (block.classList.contains("subheading-second")) {
+        subheading("subheading-second");
+    }
+    if (block.classList.contains("subheading-first-content")) {
+        subheading("subheading-first-content");
+    }
+    if (block.classList.contains("textblock-first")) {
+        testBlockFirst("textblock-first");
+    }
+    if (block.classList.contains("textblock-second")) {
+        testBlockFirst("textblock-second");
+    }
 }
 
 function textWithOutHeading(sourcePara) {
@@ -311,4 +332,120 @@ function textBlock() {
     });
     const finalContainer = document.querySelectorAll("main .with-bg > .sm-12")[1];
     finalContainer.appendChild(container);
+}
+
+function h3Heading(classType) {
+    let sourceText = document.querySelector(
+        '.text.' + classType + '.block p code'
+    )?.textContent.trim();
+
+    if (sourceText == null) {
+        sourceText = document.querySelector(
+            '.text.' + classType + '.block p'
+        )?.textContent.trim();
+    }
+    if (sourceText) {
+        let container = document.createElement('div');
+        container.className = 'M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV';
+        container.setAttribute('role', 'region');
+
+        let anchor = document.createElement('div');
+        anchor.className = 'anchor';
+        anchor.id = 'new-to-hsbc-uk';
+
+        let heading = document.createElement('h3');
+        heading.className = 'heading A-TYP22L-RW-ALL remove-bottom-space';
+        heading.id = 'pp_tools_heading_4';
+        heading.textContent = sourceText;
+
+        container.appendChild(anchor);
+        container.appendChild(heading);
+
+        let finalContainer = document.querySelector("main .with-bg > .sm-12 > .two-column-control > #pp_tools_columnControl_2 > .cc-columns-50-50 > #pp_tools_columnControlColumn_1")
+        if (classType.includes("second")) {
+            finalContainer = document.querySelector("main .with-bg > .sm-12 > .two-column-control > #pp_tools_columnControl_2 > .cc-columns-50-50 > #pp_tools_columnControlColumn_2")
+        }
+        finalContainer.appendChild(container); // Or wherever it needs to go
+    }
+}
+
+function subheading(classType) {
+    let sourceText = document.querySelector(
+        '.text.' + classType + '.block p code'
+    )?.textContent.trim();
+
+    if (sourceText == null) {
+        sourceText = document.querySelector(
+            '.text.' + classType + '.block p'
+        )?.textContent.trim();
+    }
+    if (sourceText) {
+        let container = document.createElement('div');
+        container.className = 'M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text';
+        container.setAttribute('role', 'region');
+
+        let innerDiv = document.createElement('div');
+        innerDiv.id = 'pp_tools_richtext_15';
+        innerDiv.className = 'remove-bottom-space A-PAR16R-RW-ALL-WRAPPER';
+        innerDiv.dataset.dateFormat = 'M/D/YYYY';
+        innerDiv.dataset.timeFormat = 'HH:MM:SS A';
+        innerDiv.dataset.zone = 'America/New_York';
+
+        let paragraph = document.createElement('p');
+        paragraph.className = 'A-PAR16R-RW-ALL';
+        paragraph.textContent = sourceText;
+
+        innerDiv.appendChild(paragraph);
+        container.appendChild(innerDiv);
+
+        let finalContainer = document.querySelector("main .with-bg > .sm-12 > .two-column-control > #pp_tools_columnControl_2 > .cc-columns-50-50 > #pp_tools_columnControlColumn_1");
+        if (classType.includes("second")) {
+            finalContainer = document.querySelector("main .with-bg > .sm-12 > .two-column-control > #pp_tools_columnControl_2 > .cc-columns-50-50 > #pp_tools_columnControlColumn_2")
+        }
+        finalContainer.appendChild(container);
+    }
+}
+
+function testBlockFirst(classType) {
+    // Step 1: Select the source block
+    const sourceTextBlock = document.querySelector('.text.'+classType+'.block');
+
+    // Step 2: Extract all <p> tags from the source
+    const paragraphs = sourceTextBlock.querySelectorAll('p');
+
+    // Step 3: Build HTML for target paragraphs
+    const paragraphHtml = Array.from(paragraphs).map(p => {
+        // Step 1: decode the encoded HTML (so &lt;a&gt; becomes <a>)
+        const decodedContent = decodeHTMLNew(p.innerHTML);
+
+        // Step 2: wrap in the target <p> class
+        return `<p class="A-PAR16R-RW-ALL">${decodedContent}</p>`;
+    }).join('\n');
+
+    // Step 4: Wrap into HSBC rich-text block structure
+    const newHtml = `
+  <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text" role="region">
+      <div id="pp_tools_richtext_17"
+           class="remove-bottom-space A-PAR16R-RW-ALL-WRAPPER"
+           data-date-format="M/D/YYYY"
+           data-time-format="HH:MM:SS A"
+           data-zone="America/New_York">
+          ${paragraphHtml}
+      </div>
+  </div>
+  `;
+
+    let finalContainer = document.querySelector("main .with-bg > .sm-12 > .two-column-control > #pp_tools_columnControl_2 > .cc-columns-50-50 > #pp_tools_columnControlColumn_1");
+    if (classType.includes("second")) {
+        finalContainer = document.querySelector("main .with-bg > .sm-12 > .two-column-control > #pp_tools_columnControl_2 > .cc-columns-50-50 > #pp_tools_columnControlColumn_2")
+    }
+    const temp = document.createElement("div");
+    temp.innerHTML = newHtml;
+    finalContainer.appendChild(temp.firstElementChild);
+}
+
+function decodeHTMLNew(html) {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
 }
