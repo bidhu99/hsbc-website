@@ -195,6 +195,7 @@ async function fetchNav(block, path) {
       block.appendChild(generateHeader(leftData, rightData));
       extractHeaderData(leftData);
       handleMobileMenu();
+      calculateTopPostionSidenavFooter();
       offerBarData();
     }
   } catch (error) {
@@ -548,10 +549,49 @@ function decodeHTMLEntities(html) {
   return txt.value;
 }
 
+function calculateTopPostionSidenavFooter() {
+  const windowHeight = window.innerHeight;
+  const sidenavFooter = document.querySelector(".header-mobile-sidebar-footer");
+
+  const topValue = windowHeight - 500;
+
+  sidenavFooter.style.top = `${topValue}px`;
+}
+
+window.addEventListener("resize", calculateTopPostionSidenavFooter);
+window.addEventListener("scroll", pinnedHeader);
+
+// Pinned Header
+function pinnedHeader() {
+  const distanceFromTop = 200;
+  const scrollTop = window.scrollY; // Vertical scroll
+  const navHeader = document.querySelector(".header-nav-wrapper");
+  const headerTopContainerHeight = document.querySelector(
+    ".header-top-container"
+  )?.innerHeight;
+  const headerMainContainerHeight = document.querySelector(
+    ".header-main-container"
+  )?.innerHeight;
+  const pathname = window.location.pathname;
+
+  if (
+    "/current-accounts/products/premier" === pathname &&
+    scrollTop > distanceFromTop
+  ) {
+    navHeader.classList.add("active-pinned");
+    navHeader.style.transform = `translateY(-${
+      headerMainContainerHeight + headerTopContainerHeight
+    }px)`;
+  } else {
+    navHeader.classList.remove("active-pinned");
+  }
+}
+
 function handleMobileMenu() {
   const menuBtn = document.querySelector(".header-sidebar-trigger");
   const mobileSidebar = document.querySelector(".header-mobile-sidebar");
   const body = document.querySelector("body");
+  const closeBtn = document.querySelector(".close-submenu-trigger");
 
   mobileSidebar.addEventListener("click", function (e) {
     e.stopPropagation();
@@ -559,15 +599,34 @@ function handleMobileMenu() {
 
   menuBtn.addEventListener("click", function (e) {
     e.stopPropagation();
-    body.classList.add("sidebar-open");
-    mobileSidebar.classList.add("expanded");
-    mobileSidebar.classList.add("active");
+
+    if (body.classList.contains("sidebar-open")) {
+      body.classList.remove("sidebar-open");
+      mobileSidebar.classList.remove("expanded");
+      mobileSidebar.classList.remove("active");
+      mobileSidebar.classList.remove("submenu-expanded");
+      closeBtn.classList.add("hidden");
+    } else {
+      body.classList.add("sidebar-open");
+      mobileSidebar.classList.add("expanded");
+      mobileSidebar.classList.add("active");
+    }
+    closeSubmenuDrawer();
   });
 
   document.addEventListener("click", () => {
-    body.classList.remove("sidebar-open");
-    mobileSidebar.classList.remove("expanded");
-    mobileSidebar.classList.remove("active");
+    if (body.classList.contains("sidebar-open")) {
+      body.classList.remove("sidebar-open");
+      mobileSidebar.classList.remove("expanded");
+      mobileSidebar.classList.remove("active");
+      mobileSidebar.classList.remove("submenu-expanded");
+      closeBtn.classList.add("hidden");
+    }
+    // else {
+    //   body.classList.add("sidebar-open");
+    //   mobileSidebar.classList.add("expanded");
+    //   mobileSidebar.classList.add("active");
+    // }
     closeSubmenuDrawer();
   });
 }

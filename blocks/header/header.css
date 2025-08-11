@@ -18,6 +18,26 @@
     display: flex;
 }
 
+.header .header-nav-wrapper.active-pinned {
+    position: absolute;
+}
+
+#premier {
+    padding-top: 182px;
+}
+
+#premier .O-HERO-RW-DEV .crh-hero-banner__main-image-wrapper-triangle {
+    border-bottom: 29.3rem solid #fff;
+}
+
+#premier .intro-section.hero-remove-height {
+    height: 100%;
+}
+
+.O-PINBANNER-RW-ALL .pinned-wrapper .A-PINBANNER-TITLE-RW-ALL {
+    font-size: 16px;
+}
+
 @media screen and (max-width: 60em) {
     .header .header-mobile-logo,
     .header .header-mobile-logo span {

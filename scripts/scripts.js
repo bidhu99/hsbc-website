@@ -20,6 +20,7 @@ import {
 
 const pageRoutes = {
   home: "/",
+  premier: "/current-accounts/products/premier",
 };
 
 function buildHeroBlock(main) {
@@ -89,8 +90,12 @@ async function loadEager(doc) {
     const pageUrl = window.location?.pathname;
     decorateMain(main);
 
-    if (pageUrl === pageRoutes.home) {
+    if (pageUrl === pageRoutes.home || pageUrl === pageRoutes.premier) {
       document.body.classList.add("globalSmartHomePage");
+    }
+
+    if (pageUrl === pageRoutes.premier) {
+      document.body.id = "premier";
     }
 
     document.body.classList.add("appear");

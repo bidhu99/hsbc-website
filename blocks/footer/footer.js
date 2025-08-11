@@ -195,7 +195,6 @@ function primaryFooter() {
   if (footerTag) {
     footerTag.className = "";
     footerTag.className = "footer";
-    console.log(footerTag, "Footer");
 
     footerTag.appendChild(footerMain);
   }

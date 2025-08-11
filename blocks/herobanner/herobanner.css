@@ -18,6 +18,10 @@
     .O-HERO-RW-DEV .crh-hero-banner__card {
         margin-left: 0;
     }
+
+    #premier .O-HERO-RW-DEV .crh-hero-banner {
+        margin-bottom: 0;
+    }
 }
 
 @media screen and (max-width: 60rem) {
