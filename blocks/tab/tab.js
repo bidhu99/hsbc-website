@@ -13,7 +13,7 @@ export default function decorate(block) {
           <li>Enjoy a range of global discounts, travel benefits and lifestyle offers (financial and other eligibility criteria apply)</li>
           <li>Get a replacement card within 36 hours and up to $2,000 in emergency cash transfers if you lose your credit card abroad</li>
         </ul>
-      `,
+      `
     },
     {
       title: "Health",
@@ -23,7 +23,7 @@ export default function decorate(block) {
           <li>Access a range of online health services<sup><a href="#fn-online-health-services"><span>2</span></a></sup></li>
           <li>Health benefits are available alongside Cancer Bereavement Cover<sup><a href="#fn-cancer-cover"><span>5</span></a></sup></li>
         </ul>
-      `,
+      `
     },
     {
       title: "International",
@@ -34,7 +34,7 @@ export default function decorate(block) {
           <li>Open an account before relocating in over 20 destinations</li>
           <li>See all your worldwide HSBC accounts in one place</li>
         </ul>
-      `,
+      `
     },
     {
       title: "Wealth",
@@ -44,8 +44,8 @@ export default function decorate(block) {
           <li>Get support from our wealth specialists</li>
           <li>Enjoy preferential terms on a range of products and services</li>
         </ul>
-      `,
-    },
+      `
+    }
   ];
   createTabs("main .with-bg > .sm-12", extractTabsData());
 }
