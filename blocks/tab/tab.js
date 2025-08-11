@@ -1,9 +1,5 @@
-import {
-    getMetadata
-} from "../../scripts/aem.js";
-import {
-    decorateMain
-} from "../../scripts/scripts.js";
+import { getMetadata } from "../../scripts/aem.js";
+import { decorateMain } from "../../scripts/scripts.js";
 
 export default function decorate(block) {
   const tabData = [
@@ -17,7 +13,7 @@ export default function decorate(block) {
           <li>Enjoy a range of global discounts, travel benefits and lifestyle offers (financial and other eligibility criteria apply)</li>
           <li>Get a replacement card within 36 hours and up to $2,000 in emergency cash transfers if you lose your credit card abroad</li>
         </ul>
-      `
+      `,
     },
     {
       title: "Health",
@@ -27,7 +23,7 @@ export default function decorate(block) {
           <li>Access a range of online health services<sup><a href="#fn-online-health-services"><span>2</span></a></sup></li>
           <li>Health benefits are available alongside Cancer Bereavement Cover<sup><a href="#fn-cancer-cover"><span>5</span></a></sup></li>
         </ul>
-      `
+      `,
     },
     {
       title: "International",
@@ -38,7 +34,7 @@ export default function decorate(block) {
           <li>Open an account before relocating in over 20 destinations</li>
           <li>See all your worldwide HSBC accounts in one place</li>
         </ul>
-      `
+      `,
     },
     {
       title: "Wealth",
@@ -48,8 +44,8 @@ export default function decorate(block) {
           <li>Get support from our wealth specialists</li>
           <li>Enjoy preferential terms on a range of products and services</li>
         </ul>
-      `
-    }
+      `,
+    },
   ];
   createTabs("main .with-bg > .sm-12", extractTabsData());
 }
@@ -59,7 +55,7 @@ function createTabs(containerId, tabs) {
 
   const tabMainContainer = document.createElement("div");
   tabMainContainer.className = "cc-wrapper O-COLCTRL-RW-DEV";
-  tabMainContainer.setAttribute('role', 'region');
+  tabMainContainer.setAttribute("role", "region");
 
   const columnControlContainer = document.createElement("div");
   columnControlContainer.id = "pp_tools_columnControl_5";
@@ -94,12 +90,14 @@ function createTabs(containerId, tabs) {
   // Create tab header list
   const tabList = document.createElement("ul");
   tabList.className = "tab-widget-list clearfix";
-  tabList.setAttribute('role', 'tablist');
+  tabList.setAttribute("role", "tablist");
   tabs.forEach((tab, i) => {
     const li = document.createElement("li");
     li.className = "tab-widget-item";
-    li.setAttribute('role', 'presentation');
-    li.innerHTML = `<a role="button" href="#" class="tab-widget-link${i === 0 ? " is-active" : ""}" tabindex="${i}" data-index="${i}">${tab.title}</a>`;
+    li.setAttribute("role", "presentation");
+    li.innerHTML = `<a role="button" href=#tab-widget-item-${i} class="tab-widget-link${
+      i === 0 ? " is-active" : ""
+    }" tabindex="${i}" data-index="${i}">${tab.title}</a>`;
     tabList.appendChild(li);
   });
   tabMainDiv.appendChild(tabList);
@@ -107,12 +105,15 @@ function createTabs(containerId, tabs) {
   // Create tab content panels
   const contentWrapper = document.createElement("div");
   contentWrapper.className = "tab-widget-tabs";
-  tabList.setAttribute('role', 'tabpanel');
+  tabList.setAttribute("role", "tabpanel");
 
   tabs.forEach((tab, i) => {
     const mainContentContainer = document.createElement("div");
     mainContentContainer.className = "tab-widget-tab-content";
-    mainContentContainer.className = `tab-widget-tab-content${i === 0 ? "" : " hidden"}`
+    mainContentContainer.id = `tab-widget-item-${i}`;
+    mainContentContainer.className = `tab-widget-tab-content${
+      i === 0 ? "" : " hidden"
+    }`;
 
     const subContentDiv = document.createElement("div");
     subContentDiv.className = "cc-wrapper O-COLCTRL-RW-DEV";
@@ -123,12 +124,16 @@ function createTabs(containerId, tabs) {
     const subColumnControlDiv = document.createElement("div");
     subColumnControlDiv.className = "cc cc-columns-66-33 ";
 
+    const emptyDiv = document.createElement("div");
+    emptyDiv.className = "cc-column";
+
     const subToolsDiv = document.createElement("div");
     subToolsDiv.className = "cc-column";
     subToolsDiv.id = "pp_tools_columnControlColumn_9";
 
     const contentContainer = document.createElement("div");
-    contentContainer.className = "M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text";
+    contentContainer.className =
+      "M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text";
 
     const contentDiv = document.createElement("div");
     contentDiv.className = " A-PAR16R-RW-ALL-WRAPPER";
@@ -138,6 +143,7 @@ function createTabs(containerId, tabs) {
     contentContainer.appendChild(contentDiv);
     subToolsDiv.appendChild(contentContainer);
     subColumnControlDiv.appendChild(subToolsDiv);
+    subColumnControlDiv.appendChild(emptyDiv);
     subContentDivOne.appendChild(subColumnControlDiv);
     subContentDiv.appendChild(subContentDivOne);
     mainContentContainer.appendChild(subContentDiv);
@@ -161,13 +167,17 @@ function createTabs(containerId, tabs) {
       const index = e.target.dataset.index;
 
       // Remove active class from all links
-      container.querySelectorAll(".tab-widget-link").forEach(link => link.classList.remove("is-active"));
+      container
+        .querySelectorAll(".tab-widget-link")
+        .forEach((link) => link.classList.remove("is-active"));
       e.target.classList.add("is-active");
 
       // Hide all content
-      container.querySelectorAll(".tab-widget-tab-content").forEach((panel, idx) => {
-        panel.classList.toggle("hidden", idx != index);
-      });
+      container
+        .querySelectorAll(".tab-widget-tab-content")
+        .forEach((panel, idx) => {
+          panel.classList.toggle("hidden", idx != index);
+        });
     }
   });
 }
@@ -176,8 +186,8 @@ function extractTabsData() {
   const result = [];
 
   // Loop over each main tab container (Travel, Health, International, Wealth)
-  document.querySelectorAll('.tab.block > div').forEach(section => {
-    const h2s = section.querySelectorAll('h2 strong');
+  document.querySelectorAll(".tab.block > div").forEach((section) => {
+    const h2s = section.querySelectorAll("h2 strong");
 
     // First H2 contains the title
     const title = h2s[0]?.textContent.trim() || "";
@@ -198,10 +208,9 @@ function extractTabsData() {
 
     result.push({
       title,
-      content
+      content,
     });
   });
 
   return result;
 }
-

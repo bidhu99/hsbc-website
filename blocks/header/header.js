@@ -621,11 +621,12 @@ function handleMobileMenu() {
       mobileSidebar.classList.remove("active");
       mobileSidebar.classList.remove("submenu-expanded");
       closeBtn.classList.add("hidden");
-    } else {
-      body.classList.add("sidebar-open");
-      mobileSidebar.classList.add("expanded");
-      mobileSidebar.classList.add("active");
     }
+    // else {
+    //   body.classList.add("sidebar-open");
+    //   mobileSidebar.classList.add("expanded");
+    //   mobileSidebar.classList.add("active");
+    // }
     closeSubmenuDrawer();
   });
 }
