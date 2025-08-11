@@ -6,51 +6,6 @@ import {
 } from "../../scripts/scripts.js";
 
 export default function decorate(block) {
-  const tabData = [
-    {
-      title: "Travel",
-      content: `
-        <p>Upgrade your travel experience with HSBC Premier.</p>
-        <ul>
-          <li>Give you and your family peace of mind with HSBC Premier Worldwide Travel Insurance<sup><a href="#fn-premier-travel-insurance"><span>1</span></a></sup></li>
-          <li>Spend, send and receive money around the world and access HSBC UK’s best exchange rates together with our Global Money Account<sup><a href="#fn-global-money-condition"><span>4</span></a></sup> with no HSBC fees (non-HSBC fees may apply)</li>
-          <li>Enjoy a range of global discounts, travel benefits and lifestyle offers (financial and other eligibility criteria apply)</li>
-          <li>Get a replacement card within 36 hours and up to $2,000 in emergency cash transfers if you lose your credit card abroad</li>
-        </ul>
-      `
-    },
-    {
-      title: "Health",
-      content: `
-        <p>Look after your health as well as your wealth.</p>
-        <ul>
-          <li>Access a range of online health services<sup><a href="#fn-online-health-services"><span>2</span></a></sup></li>
-          <li>Health benefits are available alongside Cancer Bereavement Cover<sup><a href="#fn-cancer-cover"><span>5</span></a></sup></li>
-        </ul>
-      `
-    },
-    {
-      title: "International",
-      content: `
-        <p>Make it easier to manage your money across borders.</p>
-        <ul>
-          <li>Relax knowing if anything goes wrong you can call us 24/7 wherever you are</li>
-          <li>Open an account before relocating in over 20 destinations</li>
-          <li>See all your worldwide HSBC accounts in one place</li>
-        </ul>
-      `
-    },
-    {
-      title: "Wealth",
-      content: `
-        <p>Plan for today and tomorrow with support from your dedicated team of specialists.</p>
-        <ul>
-          <li>Get support from our wealth specialists</li>
-          <li>Enjoy preferential terms on a range of products and services</li>
-        </ul>
-      `
-    }
-  ];
   createTabs("main .with-bg > .sm-12", extractTabsData());
 }
 
