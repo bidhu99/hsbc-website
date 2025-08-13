@@ -211,13 +211,13 @@ function createEligibilityHTML(data) {
                                                                                 (
                                                                                   sub
                                                                                 ) => `
-                                                                                <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text" role="region">
-                                                                                    <div class="remove-bottom-space A-PAR16R-RW-ALL-WRAPPER">
-                                                                                        <h4><strong><span class="A-TYP16B-RW-ALL">${
-                                                                                          sub.title
-                                                                                        }</span></strong></h4>
-                                                                                    </div>
-                                                                                </div>
+                                                                                ${sub.title !== "ABC" ? `
+                                                                                  <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text" role="region">
+                                                                                      <div class="remove-bottom-space A-PAR16R-RW-ALL-WRAPPER">
+                                                                                          <h4><strong><span class="A-TYP16B-RW-ALL">${sub.title}</span></strong></h4>
+                                                                                      </div>
+                                                                                  </div>
+                                                                              ` : ''}
                                                                                 <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text" role="region">
                                                                                     <div class="A-PAR16R-RW-ALL-WRAPPER">
                                                                                         ${sub.content

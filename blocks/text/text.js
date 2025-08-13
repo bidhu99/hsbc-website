@@ -44,6 +44,12 @@ export default function decorate(block) {
     if (block.classList.contains("textblock-second")) {
         testBlockFirst("textblock-second");
     }
+    if (block.classList.contains("disclaimer")) {
+        const jsonData = disclaimerToJSON(block);
+        const wrapper = createFootnotesHTML(jsonData);
+        const container = document.querySelectorAll("main .with-bg > .sm-12")[2];
+        container.appendChild(wrapper);
+    }
 }
 
 function textWithOutHeading(sourcePara) {
@@ -448,4 +454,59 @@ function decodeHTMLNew(html) {
     const txt = document.createElement('textarea');
     txt.innerHTML = html;
     return txt.value;
+}
+
+function disclaimerToJSON(disclaimerEl) {
+  const sections = disclaimerEl.querySelectorAll(':scope > div'); // top-level divs
+  const json = {
+    title: "",
+    items: []
+  };
+
+  // First <h3> is the title
+  const titleEl = sections[0]?.querySelector('h3');
+  if (titleEl) json.title = titleEl.textContent.trim();
+
+  // Remaining <p> tags are the footnotes
+  for (let i = 1; i < sections.length; i++) {
+    const p = sections[i].querySelector('p');
+    if (p) {
+      json.items.push(p.innerHTML.trim());
+    }
+  }
+
+  return json;
+}
+
+function createFootnotesHTML(data) {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'footnote';
+
+  wrapper.innerHTML = `
+    <div class="O-SMARTSPCGEN-DEV O-FOOTNOTES-RW-DEV" role="region">
+      <div class="article-separator"></div>
+      <div class="row white">
+        <div class="m-xsm-12 m-mdsm-10 m-md-8">
+          <div class="footnote-title">
+            <div class="A-BBST28R-RW-ALL text-container text">${data.title}</div>
+          </div>
+          <ol class="A-TYPS6R-RW-DEV footnotes-list without-bottom-padding"></ol>
+        </div>
+      </div>
+    </div>
+  `;
+
+  const list = wrapper.querySelector('ol');
+
+  data.items.forEach((item, idx) => {
+    const li = document.createElement('li');
+    const div = document.createElement('div');
+    div.id = `fn-${idx+1}`;
+    div.tabIndex = -1;
+    div.innerHTML = decodeHTML(item); // ✅ this preserves and renders <a> tags
+    li.appendChild(div);
+    list.appendChild(li);
+  });
+
+  return wrapper;
 }
