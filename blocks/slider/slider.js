@@ -9,21 +9,22 @@ export default function decorate(block) {
   bindAccordionEvents();
 }
 
-
 function bindAccordionEvents() {
   document.querySelectorAll(".dropdown").forEach((dropdown) => {
     dropdown.addEventListener("click", function () {
       const expanded = this.getAttribute("aria-expanded") === "true";
       this.setAttribute("aria-expanded", !expanded);
-      const panel = document.getElementById(this.getAttribute("aria-controls"));
-      if (panel) {
-        panel.setAttribute("aria-hidden", expanded);
+
+      const parentDiv = this.parentElement;
+      const section = parentDiv.querySelector(".exp-content");
+
+      if (section) {
+        section.setAttribute("aria-hidden", expanded);
         if (expanded) {
-          panel.classList.add("expanded");
+          section.classList.add("expanded");
         } else {
-          panel.classList.remove("expanded");
+          section.classList.remove("expanded");
         }
-        // panel.style.display = expanded ? "none" : "block";
       }
     });
   });
@@ -49,7 +50,6 @@ function parseSliderHTML(sliderEl) {
       currentSection.content.push(value);
     }
   }
-
 
   function decodeEntities(str) {
     const tmp = document.createElement("div");
@@ -168,27 +168,37 @@ function parseSliderHTML(sliderEl) {
 }
 
 function createEligibilityHTML(data) {
-    const wrapper = document.createElement('div');
-    wrapper.className = "cc-wrapper O-COLCTRL-RW-DEV";
-    wrapper.setAttribute("role", "region");
+  const wrapper = document.createElement("div");
+  wrapper.className = "cc-wrapper O-COLCTRL-RW-DEV";
+  wrapper.setAttribute("role", "region");
 
-    wrapper.innerHTML = `
+  wrapper.innerHTML = `
         <div id="pp_tools_columnControl_15">
             <div class="cc cc-columns-66-33">
                 <div id="pp_tools_columnControlColumn_27" class="cc-column">
                     <div class="O-SMARTSPCGEN-DEV O-ACCRD-RW-RBWM row" role="region">
                         <div>
                             <div id="pp_tools_accordion_1" class="accordions-container sm-12">
-                                ${data.sections.map((section, idx) => {
+                                ${data.sections
+                                  .map((section, idx) => {
                                     if (section.subsections) {
-                                        // Accordion with subsections
-                                        return `
+                                      // Accordion with subsections
+                                      return `
                                             <div class="O-SMARTSPCGEN-DEV O-ADVEXP-RW-RBWM row" role="region">
-                                                <div id="pp_tools_advanced_expander_${idx+1}" class="sm-12 clear-float">
-                                                    <div class="anchor" id="${section.title.toLowerCase().replace(/\s+/g, '-')}"></div>
+                                                <div id="pp_tools_advanced_expander_${
+                                                  idx + 1
+                                                }" class="sm-12 clear-float">
+                                                    <div class="anchor" id="${section.title
+                                                      .toLowerCase()
+                                                      .replace(
+                                                        /\s+/g,
+                                                        "-"
+                                                      )}"></div>
                                                     <div class="A-EXPCNT-RW-RBWM expander">
                                                         <div class="dropdown" role="button" tabindex="0" aria-expanded="false">
-                                                            <h3 class="dropdown-text">${section.title}&nbsp;</h3>
+                                                            <h3 class="dropdown-text">${
+                                                              section.title
+                                                            }&nbsp;</h3>
                                                             <span class="chevron"></span>
                                                         </div>
                                                         <section class="exp-content" aria-hidden="true" tabindex="-1">
@@ -196,21 +206,44 @@ function createEligibilityHTML(data) {
                                                                 <div class="cc-wrapper O-COLCTRL-RW-DEV" role="region">
                                                                     <div class="cc cc-columns-100">
                                                                         <div class="cc-column">
-                                                                            ${section.subsections.map(sub => `
+                                                                            ${section.subsections
+                                                                              .map(
+                                                                                (
+                                                                                  sub
+                                                                                ) => `
                                                                                 <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text" role="region">
                                                                                     <div class="remove-bottom-space A-PAR16R-RW-ALL-WRAPPER">
-                                                                                        <h4><strong><span class="A-TYP16B-RW-ALL">${sub.title}</span></strong></h4>
+                                                                                        <h4><strong><span class="A-TYP16B-RW-ALL">${
+                                                                                          sub.title
+                                                                                        }</span></strong></h4>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="M-CONTMAST-RW-RBWM O-SMARTSPCGEN-DEV rich-text" role="region">
                                                                                     <div class="A-PAR16R-RW-ALL-WRAPPER">
-                                                                                        ${sub.content.map(item => {
-                                                                                            if (item.startsWith("<ul")) return item;
-                                                                                            return `<p class="A-PAR16R-RW-ALL">${item}</p>`;
-                                                                                        }).join('')}
+                                                                                        ${sub.content
+                                                                                          .map(
+                                                                                            (
+                                                                                              item
+                                                                                            ) => {
+                                                                                              if (
+                                                                                                item.startsWith(
+                                                                                                  "<ul"
+                                                                                                )
+                                                                                              )
+                                                                                                return item;
+                                                                                              return `<p class="A-PAR16R-RW-ALL">${item}</p>`;
+                                                                                            }
+                                                                                          )
+                                                                                          .join(
+                                                                                            ""
+                                                                                          )}
                                                                                     </div>
                                                                                 </div>
-                                                                            `).join('')}
+                                                                            `
+                                                                              )
+                                                                              .join(
+                                                                                ""
+                                                                              )}
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -220,15 +253,18 @@ function createEligibilityHTML(data) {
                                                 </div>
                                             </div>
                                         `;
-                                    }
-                                    else if (section.documents) {
-                                        // Accordion with documents
-                                        return `
+                                    } else if (section.documents) {
+                                      // Accordion with documents
+                                      return `
                                             <div class="O-SMARTSPCGEN-DEV O-ADVEXP-RW-RBWM row" role="region">
-                                                <div id="pp_tools_advanced_expander_${idx+1}" class="sm-12 clear-float">
+                                                <div id="pp_tools_advanced_expander_${
+                                                  idx + 1
+                                                }" class="sm-12 clear-float">
                                                     <div class="A-EXPCNT-RW-RBWM expander">
                                                         <div class="dropdown" role="button" tabindex="0" aria-expanded="false">
-                                                            <h3 class="dropdown-text">${section.title}&nbsp;</h3>
+                                                            <h3 class="dropdown-text">${
+                                                              section.title
+                                                            }&nbsp;</h3>
                                                             <span class="chevron"></span>
                                                         </div>
                                                         <section class="exp-content" aria-hidden="true" tabindex="-1">
@@ -239,7 +275,12 @@ function createEligibilityHTML(data) {
                                                                             <div class="O-SMARTSPCGEN-DEV M-CONTMAST-RW-RBWM links" role="region">
                                                                                 <div>
                                                                                     <ul class="links-list">
-                                                                                        ${section.documents.map((doc, docIdx) => `
+                                                                                        ${section.documents
+                                                                                          .map(
+                                                                                            (
+                                                                                              doc,
+                                                                                              docIdx
+                                                                                            ) => `
                                                                                             <li>
                                                                                                 <div class="link-container">
                                                                                                     <a class="A-LNKD-RW-ALL" href="${doc.url}" download>
@@ -249,7 +290,11 @@ function createEligibilityHTML(data) {
                                                                                                     </a>
                                                                                                 </div>
                                                                                             </li>
-                                                                                        `).join('')}
+                                                                                        `
+                                                                                          )
+                                                                                          .join(
+                                                                                            ""
+                                                                                          )}
                                                                                     </ul>
                                                                                 </div>
                                                                             </div>
@@ -263,8 +308,9 @@ function createEligibilityHTML(data) {
                                             </div>
                                         `;
                                     }
-                                    return '';
-                                }).join('')}
+                                    return "";
+                                  })
+                                  .join("")}
                             </div>
                         </div>
                     </div>
@@ -273,8 +319,5 @@ function createEligibilityHTML(data) {
             </div>
         </div>
     `;
-    return wrapper;
+  return wrapper;
 }
-
-
-
