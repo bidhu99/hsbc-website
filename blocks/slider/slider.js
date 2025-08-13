@@ -1,8 +1,7 @@
 import { getMetadata } from "../../scripts/aem.js";
 
 export default function decorate(block) {
-  const sliderElement = document.querySelector(".slider.block");
-  const data = parseSliderHTML(sliderElement);
+  const data = parseSliderHTML(block);
 
   const container = document.querySelectorAll("main .with-bg > .sm-12")[1];
   const wrapper = createEligibilityHTML(data);
